@@ -2,7 +2,7 @@
 
 $ImageName = "randumduck69/postall:v4-latest"
 $ContainerName = "postall_app"
-$DataDir = Join-Path$PWD "data"
+$DataDir = Join-Path $PWD "data"
 $MemoryLimit = "1536m"
 
 Write-Host "Starting Postall_V4 pre-flight checks..." -ForegroundColor Cyan
