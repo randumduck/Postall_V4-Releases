@@ -2,7 +2,7 @@
 
 $ImageName = "randumduck69/postall:v4-latest"
 $ContainerName = "postall_app"
-$DataDir = Join-Path $PWD "data"
+$VolumeName = "postall_data"
 $MemoryLimit = "1536m"
 
 Write-Host "Starting Postall_V4 pre-flight checks..." -ForegroundColor Cyan
@@ -54,10 +54,10 @@ if ($runApp -notmatch "^[Yy]$") {
     exit 0
 }
 
-# SILENT CHECK: Uses filter instead of inspect to avoid PowerShell stderr exceptions
+# Silent check using filter to avoid PowerShell stderr exceptions
 $existingContainer = docker ps -a -q -f name="^${ContainerName}$"
 if ($existingContainer) {
-    $replaceContainer = Read-Host "A '$ContainerName' container exists. Replace it? This stops/removes the container but keeps host data. (y/n)"
+    $replaceContainer = Read-Host "A '$ContainerName' container exists. Replace it? This stops/removes the container but keeps persistent data. (y/n)"
     if ($replaceContainer -notmatch "^[Yy]$") {
         Write-Host "Existing container left unchanged." -ForegroundColor Yellow
         exit 0
@@ -70,17 +70,15 @@ if ($existingContainer) {
     }
 }
 
-# HOST MOUNT: Creates a local 'data' folder to satisfy the UI's persistent volume requirement
-if (-not (Test-Path $DataDir)) {
-    New-Item -ItemType Directory -Path $DataDir | Out-Null
-}
+# Create named Docker volume to ensure full POSIX SQLite write compatibility
+docker volume create $VolumeName | Out-Null
 
-Write-Host "Launching Postall_V4 with persistent host storage at $DataDir..." -ForegroundColor Cyan
+Write-Host "Launching Postall_V4 with volume '$VolumeName'..." -ForegroundColor Cyan
 
 docker run -d `
     --name $ContainerName `
     --publish 8000:8000 `
-    --volume "${DataDir}:/app/data" `
+    --volume "${VolumeName}:/app/data" `
     --memory=$MemoryLimit `
     --memory-swap=$MemoryLimit `
     --cpus=2.0 `
