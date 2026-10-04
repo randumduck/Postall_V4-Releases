@@ -1,1 +1,1 @@
-{"latest_version": "4.0.1", "release_date": "2026-10-04", "changelog": ["Enterprise security patch"], "update_instructions": "docker compose pull && docker compose up -d"}
+﻿{"patch_url":"https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/patch_v4.0.2.zip","changelog":["Manual command-line production release v4.0.2","Stable N-1 promotional rollout"],"patch_sha256":"42162ad3d4acfc83cef1fe6ce9a43b87e4d855c022638dbab527da668442e52d","latest_version":"4.0.2"}
