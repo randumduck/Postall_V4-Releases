@@ -1,0 +1,10 @@
+{
+  "latest_version": "4.0.0",
+  "release_date": "2026-10-04",
+  "changelog": [
+    "Initial Enterprise Release",
+    "Encrypted PyArmor backend",
+    "Postall_V4 Rebranding"
+  ],
+  "update_command": "docker pull randumduck69/postall:v4-latest && docker restart postall_engine"
+}
