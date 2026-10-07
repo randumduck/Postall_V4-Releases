@@ -9,12 +9,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Dual-Theme Token Architecture with Contrast-Protected Typography */
         :root[data-theme="dark"] {
             --bg-base: #090807;
             --bg-surface: #141210;
-            --bg-card: rgba(28, 25, 23, 0.75);
-            --bg-elevated: #0c0a09;
+            --bg-card: rgba(28, 25, 23, 0.85);
+            --bg-elevated: #151311;
             --border-subtle: rgba(87, 83, 78, 0.5);
             --text-main: #f5f5f4;
             --text-muted: #a8a29e;
@@ -22,9 +21,9 @@
             --accent-glow: radial-gradient(circle at 50% 0%, rgba(217, 119, 6, 0.16) 0%, rgba(180, 83, 9, 0.05) 45%, transparent 70%);
             --grid-color: rgba(217, 119, 6, 0.07);
             --code-bg: #050403;
-            --announcement-bg: linear-gradient(to right, #451a03, #1c1917, #451a03);
-            --announcement-border: rgba(217, 119, 6, 0.25);
-            --announcement-text: #fef3c7;
+            --chat-user-bg: #b45309;
+            --chat-user-text: #ffffff;
+            --chat-bot-bg: #1c1917;
         }
 
         :root[data-theme="light"] {
@@ -35,13 +34,13 @@
             --border-subtle: #e5dfd5;
             --text-main: #1c1917;
             --text-muted: #57534e;
-            --accent-color: #b45309; /* High-contrast bronze-amber for white backgrounds */
+            --accent-color: #b45309;
             --accent-glow: radial-gradient(circle at 50% 0%, rgba(217, 119, 6, 0.09) 0%, rgba(180, 83, 9, 0.02) 50%, transparent 70%);
             --grid-color: rgba(180, 83, 9, 0.05);
             --code-bg: #1c1917;
-            --announcement-bg: linear-gradient(to right, #fef3c7, #fffbeb, #fef3c7);
-            --announcement-border: rgba(217, 119, 6, 0.3);
-            --announcement-text: #92400e;
+            --chat-user-bg: #b45309;
+            --chat-user-text: #ffffff;
+            --chat-bot-bg: #ede8df;
         }
 
         body {
@@ -55,7 +54,6 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Dynamic Theme-Aware Gradient for Headings and Logos */
         :root[data-theme="dark"] .text-brand-gradient {
             background: linear-gradient(135deg, #fbbf24 0%, #fde68a 50%, #f59e0b 100%);
             -webkit-background-clip: text;
@@ -105,23 +103,120 @@
         .theme-accent {
             color: var(--accent-color);
         }
+
+        /* Custom Scrollbar for Chat Box */
+        .chat-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="bg-luxury-grid selection:bg-amber-500 selection:text-stone-950 flex flex-col justify-between">
 
     <div class="ambient-glow"></div>
 
-    <div class="relative z-10 flex flex-col flex-grow">
-        <!-- Top Announcement Bar -->
-        <div style="background: var(--announcement-bg); border-color: var(--announcement-border); color: var(--announcement-text);" class="border-b text-xs py-2.5 px-4 text-center backdrop-blur-md shadow-sm flex items-center justify-center space-x-3 transition-colors">
-            <span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <span class="font-semibold">Postall Self-Hosted v4.0.4 Live</span> 
-            <span class="opacity-50">•</span>
-            <span class="bg-amber-500/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-amber-500/30">Managed Cloud SaaS Version Coming Soon</span>
+    <!-- Floating SaaS Announcement Toast (Bottom-Left) -->
+    <aside id="saasToast" aria-label="Product announcement" class="fixed bottom-6 left-6 z-40 max-w-sm w-full mx-4 sm:mx-0 p-4 rounded-2xl theme-card border shadow-2xl backdrop-blur-xl transition-all duration-300 transform translate-y-0">
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[11px] font-mono uppercase tracking-wider font-bold theme-accent">v4.0.4 Stable Live</span>
+            </div>
+            <button onclick="dismissToast()" class="theme-muted hover:text-amber-500 text-xs p-1 rounded-md transition" title="Dismiss">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <p class="text-xs theme-muted mt-2 leading-relaxed">
+            Prefer cloud hosting? <strong>Managed Cloud SaaS</strong> is coming soon with automated scaling and collaborative team spaces.
+        </p>
+        <div class="mt-3 flex items-center justify-between pt-2 border-t theme-elevated">
+            <a href="#contact" class="text-xs font-semibold theme-accent hover:underline flex items-center space-x-1">
+                <span>Join SaaS Waitlist</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+            <span class="text-[10px] theme-muted opacity-70">No credit card needed</span>
+        </div>
+    </aside>
+
+    <!-- Floating Native Concierge Bot (Bottom-Right) -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <!-- Chat Window Panel -->
+        <div id="chatWidget" class="hidden w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[80vh] rounded-3xl theme-card border shadow-2xl backdrop-blur-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 scale-95 opacity-0">
+            <!-- Header -->
+            <div class="p-4 border-b theme-elevated flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-600 to-yellow-600 flex items-center justify-center text-stone-950 font-black text-sm shadow-md">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold leading-tight flex items-center space-x-1.5">
+                            <span>Postall Concierge</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>
+                        </h3>
+                        <span class="text-[10px] theme-muted">Instant Local AI Support</span>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="theme-muted hover:text-amber-500 text-xs p-1.5 rounded-lg transition" title="Close chat">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 chat-scroll text-xs">
+                <!-- Welcome Bot Message -->
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="p-3 rounded-2xl rounded-tl-sm border" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
+                        <p class="leading-relaxed">Welcome to Postall! How can I assist your deployment or configuration today?</p>
+                    </div>
+                </div>
+
+                <!-- Suggested Quick Query Chips -->
+                <div id="quickChips" class="pt-2 flex flex-wrap gap-1.5">
+                    <button onclick="sendQuickPrompt('Quick Install Command')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                        🚀 Quick Install
+                    </button>
+                    <button onclick="sendQuickPrompt('System Requirements')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                        ⚙️ System Specs
+                    </button>
+                    <button onclick="sendQuickPrompt('Docker Volumes & SQLite')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                        🔒 Volume Safeguards
+                    </button>
+                    <button onclick="sendQuickPrompt('Local LLM Setup')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                        🤖 Local LLMs
+                    </button>
+                    <button onclick="sendQuickPrompt('Cloud SaaS Version')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                        ☁️ Cloud SaaS Launch
+                    </button>
+                </div>
+            </div>
+
+            <!-- Input Footer Form -->
+            <form onsubmit="handleChatSubmit(event)" class="p-3 border-t theme-elevated flex items-center space-x-2">
+                <input id="chatInput" type="text" placeholder="Ask about install, Ollama, Docker..." autocomplete="off" class="flex-1 bg-transparent px-3 py-2 text-xs rounded-xl border theme-card focus:outline-none focus:border-amber-500 transition placeholder:theme-muted" />
+                <button type="submit" class="bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 font-bold px-3 py-2 rounded-xl text-xs hover:opacity-90 transition shadow-md flex items-center justify-center">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
         </div>
 
+        <!-- Floating Chat Launcher Button -->
+        <button onclick="toggleChat()" id="chatLauncher" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-600 text-stone-950 flex items-center justify-center shadow-xl shadow-amber-600/30 font-bold text-lg hover:scale-105 active:scale-95 transition-all duration-200">
+            <i id="launcherIcon" class="fa-solid fa-comment-dots"></i>
+        </button>
+    </div>
+
+    <div class="relative z-10 flex flex-col flex-grow">
         <!-- Navigation Header -->
-        <header class="border-b theme-elevated sticky top-0 z-50 backdrop-blur-xl bg-opacity-80 transition-colors">
+        <header class="border-b theme-elevated sticky top-0 z-40 backdrop-blur-xl bg-opacity-80 transition-colors">
             <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-600 flex items-center justify-center font-black text-stone-950 shadow-lg shadow-amber-600/20 text-lg">P</div>
@@ -130,12 +225,14 @@
                         <span class="text-[10px] theme-accent tracking-wider uppercase font-bold">Self-Hosted Core</span>
                     </div>
                 </div>
+                <!-- Fixed Navigation Anchor Links -->
                 <nav class="hidden md:flex items-center space-x-8 text-sm theme-muted font-medium">
                     <a href="#platform" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Platform</a>
                     <a href="#integrations" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Integrations</a>
                     <a href="#ai" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Local AI</a>
                     <a href="#security" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Data Sovereignty</a>
                     <a href="#download" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Deploy</a>
+                    <a href="#contact" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Contact</a>
                 </nav>
                 <div class="flex items-center space-x-4">
                     <button onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle Theme" class="p-2.5 rounded-xl border theme-elevated theme-muted hover:text-amber-600 dark:hover:text-amber-400 transition shadow-sm flex items-center justify-center">
@@ -157,7 +254,6 @@
                     <span class="text-emerald-600 dark:text-emerald-400 font-bold">v4.0.4 Stable</span>
                 </div>
                 
-                <!-- High-Contrast Tagline -->
                 <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6 max-w-4xl mx-auto leading-[1.1]">
                     Autonomous Social Architecture, <span class="text-brand-gradient">Engineered for Reliability</span>.
                 </h1>
@@ -217,7 +313,7 @@
             </div>
         </section>
 
-        <!-- Supported Tools / Integrations Section -->
+        <!-- Integrations Section -->
         <section id="integrations" class="py-16 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6 text-center">
                 <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-8">Unified Multi-Platform Publishing & AI Integration</h2>
@@ -288,6 +384,54 @@
             </div>
         </section>
 
+        <!-- RESTORED: Data Sovereignty & Security Section -->
+        <section id="security" class="py-24 border-b theme-elevated">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
+                            <i class="fa-solid fa-vault"></i><span>Absolute Data Sovereignty</span>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Your Data Stays Yours. Period.</h2>
+                        <p class="theme-muted text-base mb-8 leading-relaxed">
+                            Unlike third-party SaaS schedulers that store your social credentials and brand strategies on central cloud clusters, Postall runs strictly under your direct custody using encrypted local volume mounts.
+                        </p>
+                        <ul class="space-y-4 text-sm font-medium">
+                            <li class="flex items-center space-x-3">
+                                <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
+                                <span><strong>Zero Vendor Lock-in:</strong> Access or migrate your SQLite database anytime.</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
+                                <span><strong>Isolated State Guard:</strong> Docker named volumes isolate records from crashes.</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
+                                <span><strong>Local Secret Vault:</strong> OAuth tokens and keys never leave your container.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="theme-card border rounded-2xl p-8 shadow-2xl backdrop-blur relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600"></div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center space-x-2">
+                            <i class="fa-solid fa-shield-halved theme-accent"></i>
+                            <span>Enterprise Trust Safeguards</span>
+                        </h4>
+                        <div class="grid grid-cols-2 gap-4 text-center font-mono mt-6">
+                            <div class="theme-elevated p-4 rounded-xl border">
+                                <span class="text-emerald-500 text-lg font-bold block">100%</span>
+                                <span class="text-[10px] theme-muted uppercase font-semibold">Data Ownership</span>
+                            </div>
+                            <div class="theme-elevated p-4 rounded-xl border">
+                                <span class="text-amber-500 text-lg font-bold block">Zero</span>
+                                <span class="text-[10px] theme-muted uppercase font-semibold">Monthly Fees</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Capabilities Section -->
         <section id="features" class="py-24 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6">
@@ -311,7 +455,7 @@
                         </div>
                         <h4 class="text-xl font-bold mb-3">POSIX Volume Safeguards</h4>
                         <p class="theme-muted text-sm leading-relaxed">
-                            Docker named volumes (<code class="theme-accent font-mono text-xs">postall_data</code>) eliminate Windows filesystem locking errors across SQLite ledgers and journal states.
+                            Docker named volumes (<code class="theme-accent font-mono text-xs">postall_data</code>) eliminate Windows filesystem locking errors across SQLite ledgers.
                         </p>
                     </div>
                     <div class="theme-card border rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-300 shadow-lg">
@@ -320,7 +464,7 @@
                         </div>
                         <h4 class="text-xl font-bold mb-3">Predictable Resource Ceilings</h4>
                         <p class="theme-muted text-sm leading-relaxed">
-                            Strict resource governance limits memory allocation to 1536MB and 2 CPUs, guaranteeing smooth co-existence with existing servers.
+                            Strict resource governance limits memory allocation to 1536MB and 2 CPUs, guaranteeing smooth co-existence with existing machines.
                         </p>
                     </div>
                 </div>
@@ -328,7 +472,7 @@
         </section>
 
         <!-- Multi-OS Deployment Section -->
-        <section id="download" class="py-24">
+        <section id="download" class="py-24 border-b theme-elevated">
             <div class="max-w-4xl mx-auto px-6">
                 <div class="theme-card border rounded-3xl p-8 sm:p-14 shadow-2xl backdrop-blur-xl relative overflow-hidden">
                     <div class="text-center max-w-xl mx-auto mb-10 relative z-10">
@@ -372,6 +516,61 @@
                 </div>
             </div>
         </section>
+
+        <!-- Contact Us Section -->
+        <section id="contact" class="py-24">
+            <div class="max-w-4xl mx-auto px-6">
+                <div class="theme-card border rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+                    <div class="text-center max-w-xl mx-auto mb-10">
+                        <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-3">
+                            <i class="fa-solid fa-envelope"></i><span>Direct Support & Inquiries</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Connect With the Team</h2>
+                        <p class="theme-muted text-sm">Have questions about self-hosting, early SaaS access, or custom social pipelines? Reach out directly.</p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-3 gap-4 mb-8">
+                        <div class="theme-elevated border p-4 rounded-2xl text-center">
+                            <i class="fa-solid fa-cloud-arrow-up theme-accent text-lg mb-2"></i>
+                            <h4 class="text-xs font-bold mb-1">SaaS Waitlist</h4>
+                            <p class="text-[11px] theme-muted">Early bird priority for cloud clusters.</p>
+                        </div>
+                        <div class="theme-elevated border p-4 rounded-2xl text-center">
+                            <i class="fa-solid fa-code-pull-request theme-accent text-lg mb-2"></i>
+                            <h4 class="text-xs font-bold mb-1">Feature Requests</h4>
+                            <p class="text-[11px] theme-muted">Propose new network connectors.</p>
+                        </div>
+                        <div class="theme-elevated border p-4 rounded-2xl text-center">
+                            <i class="fa-solid fa-shield-halved theme-accent text-lg mb-2"></i>
+                            <h4 class="text-xs font-bold mb-1">Security & Bugs</h4>
+                            <p class="text-[11px] theme-muted">Direct patch reports and triage.</p>
+                        </div>
+                    </div>
+
+                    <div class="theme-elevated border rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3 text-left">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider font-semibold theme-muted block">Direct Contact Email</span>
+                                <span id="contactEmail" class="font-mono text-sm font-bold theme-accent">contact.postall@gmail.com</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto">
+                            <button onclick="copyContactEmail()" id="copyEmailBtn" class="flex-1 sm:flex-initial theme-card border hover:border-amber-500/50 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                            <a href="mailto:contact.postall@gmail.com" class="flex-1 sm:flex-initial bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold px-4 py-2.5 rounded-xl text-xs transition shadow-md flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                <span>Open Mail</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- Footer -->
@@ -379,8 +578,9 @@
         <p>&copy; 2026 Postall Enterprise Systems. All rights reserved. Secured & Maintained via GitHub OTA Channels.</p>
     </footer>
 
-    <!-- Interactive Script -->
+    <!-- Interactive Logic (OS Switcher, Theme Switcher, Toast Dismiss, & Native Chatbot Engine) -->
     <script>
+        // OS Commands Matrix
         const commands = {
             win: {
                 cmd: "irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex",
@@ -431,6 +631,32 @@
             }, 2500);
         }
 
+        function copyContactEmail() {
+            const email = document.getElementById('contactEmail').innerText.trim();
+            navigator.clipboard.writeText(email);
+            const btn = document.getElementById('copyEmailBtn');
+            btn.innerHTML = '<i class="fa-solid fa-check text-emerald-500"></i><span>Copied</span>';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copy</span>';
+            }, 2000);
+        }
+
+        function dismissToast() {
+            const toast = document.getElementById('saasToast');
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 300);
+            localStorage.setItem('postall_toast_dismissed', 'true');
+        }
+
+        if (localStorage.getItem('postall_toast_dismissed') === 'true') {
+            const toast = document.getElementById('saasToast');
+            if (toast) toast.style.display = 'none';
+        }
+
+        // Theme Toggle Logic
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             const icon = document.getElementById('themeIcon');
@@ -450,6 +676,116 @@
 
         const savedTheme = localStorage.getItem('postall_theme') || 'dark';
         applyTheme(savedTheme);
+
+        // ==========================================
+        // Native Client-Side Chatbot Concierge Engine
+        // ==========================================
+        let isChatOpen = false;
+
+        function toggleChat() {
+            const widget = document.getElementById('chatWidget');
+            const icon = document.getElementById('launcherIcon');
+            isChatOpen = !isChatOpen;
+
+            if (isChatOpen) {
+                widget.classList.remove('hidden');
+                setTimeout(() => {
+                    widget.classList.remove('scale-95', 'opacity-0');
+                    widget.classList.add('scale-100', 'opacity-100');
+                    document.getElementById('chatInput').focus();
+                }, 10);
+                icon.className = 'fa-solid fa-chevron-down';
+            } else {
+                widget.classList.remove('scale-100', 'opacity-100');
+                widget.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    widget.classList.add('hidden');
+                }, 250);
+                icon.className = 'fa-solid fa-comment-dots';
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const container = document.getElementById('chatMessages');
+            const msgRow = document.createElement('div');
+            msgRow.className = sender === 'user' ? 'flex justify-end' : 'flex items-start space-x-2';
+
+            if (sender === 'user') {
+                msgRow.innerHTML = `
+                    <div class="p-3 rounded-2xl rounded-tr-sm max-w-[85%] font-medium" style="background-color: var(--chat-user-bg); color: var(--chat-user-text);">
+                        <p class="leading-relaxed">${text}</p>
+                    </div>
+                `;
+            } else {
+                msgRow.innerHTML = `
+                    <div class="w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="p-3 rounded-2xl rounded-tl-sm border max-w-[85%]" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
+                        <p class="leading-relaxed">${text}</p>
+                    </div>
+                `;
+            }
+
+            container.appendChild(msgRow);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendQuickPrompt(promptText) {
+            appendMessage('user', promptText);
+            generateBotResponse(promptText);
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            appendMessage('user', val);
+            input.value = '';
+            generateBotResponse(val);
+        }
+
+        function generateBotResponse(query) {
+            const q = query.toLowerCase();
+            const container = document.getElementById('chatMessages');
+
+            // Temporary Typing Indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.id = 'typingIndicator';
+            typingIndicator.className = 'flex items-center space-x-2 text-stone-500 text-[10px] pl-8';
+            typingIndicator.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i><span>Processing...</span>';
+            container.appendChild(typingIndicator);
+            container.scrollTop = container.scrollHeight;
+
+            setTimeout(() => {
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) indicator.remove();
+
+                let reply = "";
+
+                if (q.includes('install') || q.includes('deploy') || q.includes('command') || q.includes('run') || q.includes('script')) {
+                    reply = "To deploy Postall on Windows PowerShell, run:<br><code class='text-amber-400 font-mono text-[10px] block mt-1 bg-black/40 p-1.5 rounded'>irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex</code><br>It provisions Docker volumes and boots the engine automatically!";
+                } else if (q.includes('req') || q.includes('spec') || q.includes('ram') || q.includes('cpu') || q.includes('memory') || q.includes('hardware')) {
+                    reply = "<strong>Postall System Specifications:</strong><br>• Docker Desktop or Docker Engine<br>• 1536 MB RAM (Strict RAM limit)<br>• 2 Virtual CPUs<br>• Lightweight storage persistent via named volumes.";
+                } else if (q.includes('volume') || q.includes('sqlite') || q.includes('permission') || q.includes('lock') || q.includes('docker')) {
+                    reply = "Postall avoids Windows SQLite file-locking by mounting named Docker volumes (<code class='text-amber-400 font-mono'>postall_data</code>) rather than direct bind mounts. This preserves WAL journal write transactions without disk access collisions.";
+                } else if (q.includes('llm') || q.includes('ai') || q.includes('ollama') || q.includes('model') || q.includes('llama')) {
+                    reply = "Postall interfaces directly with local runtimes like <strong>Ollama</strong> (supporting Llama 3, Mistral, and custom weights). Your prompts, brand drafts, and captions stay completely on your hardware with 0 API tokens.";
+                } else if (q.includes('saas') || q.includes('cloud') || q.includes('host') || q.includes('waitlist')) {
+                    reply = "The fully managed <strong>Postall Cloud SaaS</strong> cluster is currently in active staging! You can reserve priority beta access in our Contact section or by emailing <code class='text-amber-400 font-mono'>contact.postall@gmail.com</code>.";
+                } else if (q.includes('ota') || q.includes('update') || q.includes('version') || q.includes('patch')) {
+                    reply = "Postall v4.0.4 includes silent background OTA updates. The container checks the GitHub version oracle for signed SHA-256 archives and applies delta patches automatically without system restarts.";
+                } else if (q.includes('contact') || q.includes('email') || q.includes('support') || q.includes('bug')) {
+                    reply = "You can contact our core engineering team directly at <code class='text-amber-400 font-mono'>contact.postall@gmail.com</code> or submit feature requests through our GitHub Releases repository.";
+                } else {
+                    reply = "I specialize in Postall self-hosting architectures, Local LLM setup, and deployment troubleshooting. Try asking about <em>'System Specs'</em>, <em>'How to install'</em>, <em>'Docker volumes'</em>, or <em>'Local AI'</em>!";
+                }
+
+                appendMessage('bot', reply);
+            }, 450);
+        }
     </script>
 </body>
 </html>
