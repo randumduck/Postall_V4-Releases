@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postall | Autonomous Social Media Automation & Local AI Engine</title>
-    <meta name="description" content="High-performance, self-hosted social media automation with local LLM AI generation and absolute data ownership.">
+    <title>Postall | Autonomous Social Architecture & Creative Media Studio</title>
+    <meta name="description" content="Self-hosted social media automation, omnichannel post creation, media asset management, and private local AI content generation for agencies and creators.">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,9 +12,9 @@
         :root[data-theme="dark"] {
             --bg-base: #090807;
             --bg-surface: #141210;
-            --bg-card: rgba(28, 25, 23, 0.85);
+            --bg-card: rgba(28, 25, 23, 0.88);
             --bg-elevated: #151311;
-            --border-subtle: rgba(87, 83, 78, 0.5);
+            --border-subtle: rgba(87, 83, 78, 0.45);
             --text-main: #f5f5f4;
             --text-muted: #a8a29e;
             --accent-color: #f59e0b;
@@ -24,6 +24,8 @@
             --chat-user-bg: #b45309;
             --chat-user-text: #ffffff;
             --chat-bot-bg: #1c1917;
+            --chat-code-bg: #12100e;
+            --chat-code-text: #fde68a;
         }
 
         :root[data-theme="light"] {
@@ -40,7 +42,9 @@
             --code-bg: #1c1917;
             --chat-user-bg: #b45309;
             --chat-user-text: #ffffff;
-            --chat-bot-bg: #ede8df;
+            --chat-bot-bg: #f5f2ea;
+            --chat-code-bg: #292524;
+            --chat-code-text: #fef3c7;
         }
 
         body {
@@ -100,13 +104,38 @@
             color: var(--text-muted);
         }
 
+        .theme-main {
+            color: var(--text-main);
+        }
+
         .theme-accent {
             color: var(--accent-color);
         }
 
-        /* Custom Scrollbar for Chat Box */
+        /* Responsive Text Wrapping and Code Formatting */
+        .chat-bubble-content {
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            max-width: 100%;
+        }
+
+        .chat-code-snippet {
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.5rem 0.65rem;
+            border-radius: 0.5rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 10.5px;
+            line-height: 1.45;
+            word-break: break-all;
+            white-space: pre-wrap;
+            background-color: var(--chat-code-bg);
+            color: var(--chat-code-text);
+            border: 1px solid rgba(180, 83, 9, 0.35);
+        }
+
         .chat-scroll::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
         .chat-scroll::-webkit-scrollbar-track {
             background: transparent;
@@ -121,8 +150,8 @@
 
     <div class="ambient-glow"></div>
 
-    <!-- Floating SaaS Announcement Toast (Bottom-Left) -->
-    <aside id="saasToast" aria-label="Product announcement" class="fixed bottom-6 left-6 z-40 max-w-sm w-full mx-4 sm:mx-0 p-4 rounded-2xl theme-card border shadow-2xl backdrop-blur-xl transition-all duration-300 transform translate-y-0">
+    <!-- Floating SaaS Announcement Toast (Responsive Non-Colliding Layout) -->
+    <aside id="saasToast" aria-label="Product announcement" class="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-40 max-w-[calc(100vw-2rem)] sm:max-w-sm p-4 rounded-2xl theme-card border shadow-2xl backdrop-blur-xl transition-all duration-300">
         <div class="flex items-start justify-between gap-3">
             <div class="flex items-center space-x-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -133,21 +162,21 @@
             </button>
         </div>
         <p class="text-xs theme-muted mt-2 leading-relaxed">
-            Prefer cloud hosting? <strong>Managed Cloud SaaS</strong> is coming soon with automated scaling and collaborative team spaces.
+            Need multi-brand team collaboration without managing servers? <strong>Postall Managed Cloud</strong> is launching soon.
         </p>
         <div class="mt-3 flex items-center justify-between pt-2 border-t theme-elevated">
             <a href="#contact" class="text-xs font-semibold theme-accent hover:underline flex items-center space-x-1">
-                <span>Join SaaS Waitlist</span>
+                <span>Join Agency Waitlist</span>
                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </a>
             <span class="text-[10px] theme-muted opacity-70">No credit card needed</span>
         </div>
     </aside>
 
-    <!-- Floating Native Concierge Bot (Bottom-Right) -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <!-- Floating Native Concierge Bot -->
+    <div class="fixed bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end">
         <!-- Chat Window Panel -->
-        <div id="chatWidget" class="hidden w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[80vh] rounded-3xl theme-card border shadow-2xl backdrop-blur-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 scale-95 opacity-0">
+        <div id="chatWidget" class="hidden w-[380px] max-w-[calc(100vw-2rem)] h-[530px] max-h-[82vh] rounded-3xl theme-card border shadow-2xl backdrop-blur-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 scale-95 opacity-0">
             <!-- Header -->
             <div class="p-4 border-b theme-elevated flex items-center justify-between">
                 <div class="flex items-center space-x-3">
@@ -159,7 +188,7 @@
                             <span>Postall Concierge</span>
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>
                         </h3>
-                        <span class="text-[10px] theme-muted">Instant Local AI Support</span>
+                        <span class="text-[10px] theme-muted">Instant Assistant & Setup Guide</span>
                     </div>
                 </div>
                 <button onclick="toggleChat()" class="theme-muted hover:text-amber-500 text-xs p-1.5 rounded-lg transition" title="Close chat">
@@ -169,39 +198,38 @@
 
             <!-- Messages Stream -->
             <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 chat-scroll text-xs">
-                <!-- Welcome Bot Message -->
                 <div class="flex items-start space-x-2">
                     <div class="w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <div class="p-3 rounded-2xl rounded-tl-sm border" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
-                        <p class="leading-relaxed">Welcome to Postall! How can I assist your deployment or configuration today?</p>
+                    <div class="p-3 rounded-2xl rounded-tl-sm border max-w-[85%] chat-bubble-content" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
+                        <p class="leading-relaxed">Welcome to Postall! Ask me anything about multi-platform publishing, local AI models, system specs, or deployment commands.</p>
                     </div>
                 </div>
+            </div>
 
-                <!-- Suggested Quick Query Chips -->
-                <div id="quickChips" class="pt-2 flex flex-wrap gap-1.5">
-                    <button onclick="sendQuickPrompt('Quick Install Command')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                        🚀 Quick Install
-                    </button>
-                    <button onclick="sendQuickPrompt('System Requirements')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                        ⚙️ System Specs
-                    </button>
-                    <button onclick="sendQuickPrompt('Docker Volumes & SQLite')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                        🔒 Volume Safeguards
-                    </button>
-                    <button onclick="sendQuickPrompt('Local LLM Setup')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                        🤖 Local LLMs
-                    </button>
-                    <button onclick="sendQuickPrompt('Cloud SaaS Version')" class="text-[11px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                        ☁️ Cloud SaaS Launch
-                    </button>
-                </div>
+            <!-- Bottom Docked Quick Chips -->
+            <div class="px-3 py-2 border-t theme-elevated flex gap-1.5 overflow-x-auto whitespace-nowrap chat-scroll bg-black/10">
+                <button onclick="sendQuickPrompt('How does Media & Post Creation work?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                    🎨 Media Creation
+                </button>
+                <button onclick="sendQuickPrompt('Compare Postall vs Mixpost / Postiz')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                    ⚖️ Postall vs Competitors
+                </button>
+                <button onclick="sendQuickPrompt('How to install on Windows?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                    🪟 Windows Setup
+                </button>
+                <button onclick="sendQuickPrompt('How to install on Linux / Mac?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                    🐧 Linux / Mac Setup
+                </button>
+                <button onclick="sendQuickPrompt('How do Local LLMs connect?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
+                    🤖 Local Ollama Setup
+                </button>
             </div>
 
             <!-- Input Footer Form -->
             <form onsubmit="handleChatSubmit(event)" class="p-3 border-t theme-elevated flex items-center space-x-2">
-                <input id="chatInput" type="text" placeholder="Ask about install, Ollama, Docker..." autocomplete="off" class="flex-1 bg-transparent px-3 py-2 text-xs rounded-xl border theme-card focus:outline-none focus:border-amber-500 transition placeholder:theme-muted" />
+                <input id="chatInput" type="text" placeholder="Ask about Linux, video formats, Ollama..." autocomplete="off" class="flex-1 bg-transparent px-3 py-2 text-xs rounded-xl border theme-card focus:outline-none focus:border-amber-500 transition text-[var(--text-main)] placeholder:opacity-60" />
                 <button type="submit" class="bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 font-bold px-3 py-2 rounded-xl text-xs hover:opacity-90 transition shadow-md flex items-center justify-center">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
@@ -215,7 +243,7 @@
     </div>
 
     <div class="relative z-10 flex flex-col flex-grow">
-        <!-- Navigation Header -->
+        <!-- Navigation Header (Fixed Breakpoint & Layout) -->
         <header class="border-b theme-elevated sticky top-0 z-40 backdrop-blur-xl bg-opacity-80 transition-colors">
             <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
@@ -225,20 +253,23 @@
                         <span class="text-[10px] theme-accent tracking-wider uppercase font-bold">Self-Hosted Core</span>
                     </div>
                 </div>
-                <!-- Fixed Navigation Anchor Links -->
-                <nav class="hidden md:flex items-center space-x-8 text-sm theme-muted font-medium">
-                    <a href="#platform" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Platform</a>
-                    <a href="#integrations" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Integrations</a>
+
+                <!-- Navigation Links with tighter spacing and lg breakpoint -->
+                <nav class="hidden lg:flex items-center space-x-6 text-sm theme-muted font-medium">
+                    <a href="#creative-studio" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Creative Studio</a>
+                    <a href="#dashboard" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Dashboard</a>
+                    <a href="#integrations" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Networks</a>
                     <a href="#ai" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Local AI</a>
                     <a href="#security" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Data Sovereignty</a>
                     <a href="#download" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Deploy</a>
                     <a href="#contact" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Contact</a>
                 </nav>
-                <div class="flex items-center space-x-4">
+
+                <div class="flex items-center space-x-3">
                     <button onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle Theme" class="p-2.5 rounded-xl border theme-elevated theme-muted hover:text-amber-600 dark:hover:text-amber-400 transition shadow-sm flex items-center justify-center">
                         <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
                     </button>
-                    <a href="#download" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-600/20 border border-amber-400/30">
+                    <a href="#download" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-600/20 border border-amber-400/30 whitespace-nowrap">
                         Get Started Free
                     </a>
                 </div>
@@ -249,7 +280,7 @@
         <section class="pt-24 pb-16 border-b theme-elevated">
             <div class="max-w-5xl mx-auto px-6 text-center">
                 <div class="inline-flex items-center space-x-3 px-4 py-1.5 rounded-full theme-card border text-xs theme-accent mb-8 shadow-sm backdrop-blur">
-                    <span class="flex items-center space-x-1.5 font-mono"><i class="fa-brands fa-github opacity-70"></i><span>randumduck/Postall-Releases</span></span>
+                    <span class="flex items-center space-x-1.5 font-mono"><i class="fa-brands fa-github opacity-70"></i><span>randumduck/Postall_V4-Releases</span></span>
                     <span class="opacity-40">•</span>
                     <span class="text-emerald-600 dark:text-emerald-400 font-bold">v4.0.4 Stable</span>
                 </div>
@@ -259,7 +290,7 @@
                 </h1>
                 
                 <p class="theme-muted text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-                    The autonomous, self-hosted social media automation engine featuring <strong>Local LLM AI generation</strong>, multi-platform publishing, zero rate limits, and zero monthly subscriptions.
+                    The self-hosted social operations hub built for <strong>media creators, agencies, and brands</strong>. Design omnichannel campaigns, generate viral copy with private Local AI, and automate publishing across every network with zero monthly seat subscriptions.
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -267,14 +298,14 @@
                         <i class="fa-solid fa-bolt text-stone-950"></i>
                         <span>Deploy in 1-Click</span>
                     </a>
-                    <a href="https://github.com/randumduck/Postall_V4-Releases" target="_blank" class="w-full sm:w-auto theme-card border hover:border-amber-500/50 font-medium px-7 py-4 rounded-xl text-sm transition backdrop-blur flex items-center justify-center space-x-3">
-                        <i class="fa-brands fa-github opacity-70"></i>
-                        <span>Star on GitHub</span>
+                    <a href="#creative-studio" class="w-full sm:w-auto theme-card border hover:border-amber-500/50 font-medium px-7 py-4 rounded-xl text-sm transition backdrop-blur flex items-center justify-center space-x-3">
+                        <i class="fa-solid fa-wand-magic-sparkles theme-accent"></i>
+                        <span>Explore Creative Studio</span>
                     </a>
                 </div>
 
-                <!-- Visual Dashboard Preview Mockup -->
-                <div id="platform" class="theme-card border rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl relative max-w-4xl mx-auto">
+                <!-- Visual Dashboard Preview Mockup (With scroll-mt anchor) -->
+                <div id="dashboard" class="scroll-mt-28 theme-card border rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl relative max-w-4xl mx-auto">
                     <div class="flex items-center justify-between pb-3 px-2 border-b theme-elevated mb-3 theme-muted text-xs">
                         <div class="flex items-center space-x-2">
                             <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
@@ -284,37 +315,164 @@
                         </div>
                         <span class="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="font-bold">Local Engine Healthy</span>
+                            <span class="font-bold">Omnichannel Engine Ready</span>
                         </span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-left">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-left">
                         <div class="theme-elevated border rounded-xl p-4">
                             <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Active Channels</span>
                             <span class="text-2xl font-black theme-accent">6 Networks</span>
-                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-1"><i class="fa-solid fa-check mr-1"></i>Fully Synchronized</span>
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-1"><i class="fa-solid fa-check mr-1"></i>Cross-Post Ready</span>
                         </div>
                         <div class="theme-elevated border rounded-xl p-4">
-                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Local AI Engine</span>
-                            <span class="text-2xl font-black">Ollama / Llama 3</span>
-                            <span class="text-[10px] theme-accent font-semibold block mt-1">Zero Cloud Latency</span>
+                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Media Pipeline</span>
+                            <span class="text-2xl font-black">4K & Reels</span>
+                            <span class="text-[10px] theme-accent font-semibold block mt-1">Aspect Auto-Format</span>
                         </div>
                         <div class="theme-elevated border rounded-xl p-4">
-                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">System Version</span>
-                            <span class="text-2xl font-black">v4.0.4</span>
-                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-1">Auto-OTA Active</span>
+                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Scheduled Campaigns</span>
+                            <span class="text-2xl font-black">24 Active</span>
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-1">Autonomous Dispatch</span>
                         </div>
                         <div class="theme-elevated border rounded-xl p-4">
                             <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Data Privacy</span>
                             <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">100% Local</span>
-                            <span class="text-[10px] theme-muted font-semibold block mt-1">POSIX Volume Guard</span>
+                            <span class="text-[10px] theme-muted font-semibold block mt-1">Zero Cloud Telemetry</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Creative Studio Section -->
+        <section id="creative-studio" class="scroll-mt-28 py-24 border-b theme-elevated">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
+                        <i class="fa-solid fa-photo-film"></i><span>Creative Production & Ad Agency Engine</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+                        Produce Once. Distribute Everywhere.
+                    </h2>
+                    <p class="theme-muted text-base leading-relaxed">
+                        Stop switching between disparate tools to resize creatives, rewrite captions, and queue campaigns. Postall gives your team an integrated visual studio to draft, format, and broadcast media effortlessly.
+                    </p>
+                </div>
+
+                <!-- Studio Interactive Preview Grid -->
+                <div class="grid lg:grid-cols-12 gap-8 items-center mb-16">
+                    <div class="lg:col-span-7 theme-card border rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur relative overflow-hidden">
+                        <div class="flex items-center justify-between pb-4 border-b theme-elevated mb-6">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 theme-accent text-[11px] font-bold">CAMPAIGN COMPOSER</span>
+                                <span class="theme-muted text-xs">Summer Product Launch • Multi-Channel</span>
+                            </div>
+                            <span class="text-emerald-500 text-xs font-semibold flex items-center space-x-1">
+                                <i class="fa-solid fa-circle-check"></i><span>Media Optimized</span>
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="theme-elevated p-4 rounded-2xl border">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-semibold theme-accent">Master Creative Post Copy</span>
+                                    <span class="text-[10px] theme-muted font-mono">248 / 2,200 chars</span>
+                                </div>
+                                <p class="text-xs leading-relaxed font-sans theme-main">
+                                    "Stop losing 30% of your agency budget to expensive seat licenses. With @Postall, own your content pipeline, automate multi-channel scheduling, and run private AI copy generation locally 🚀✨ #MarketingAutomation #SaaS #ContentStrategy"
+                                </p>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 pt-1">
+                                <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5 theme-accent border-amber-500/50">
+                                    <i class="fa-brands fa-linkedin text-blue-500"></i><span>LinkedIn (Carousel PDF)</span>
+                                </span>
+                                <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5">
+                                    <i class="fa-brands fa-instagram text-pink-500"></i><span>IG Reel (9:16)</span>
+                                </span>
+                                <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5">
+                                    <i class="fa-brands fa-x-twitter"></i><span>X Thread (Auto-Split)</span>
+                                </span>
+                                <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5">
+                                    <i class="fa-brands fa-youtube text-red-500"></i><span>YT Shorts</span>
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                                <div class="theme-elevated p-3 rounded-xl border text-center">
+                                    <i class="fa-solid fa-video text-amber-500 text-base mb-1"></i>
+                                    <span class="block text-[11px] font-bold">Hero_Trailer_4k.mp4</span>
+                                    <span class="text-[9px] theme-muted">Auto-encoded for Reels</span>
+                                </div>
+                                <div class="theme-elevated p-3 rounded-xl border text-center">
+                                    <i class="fa-solid fa-images text-blue-500 text-base mb-1"></i>
+                                    <span class="block text-[11px] font-bold">Infographic_Deck.pdf</span>
+                                    <span class="text-[9px] theme-muted">Slide Deck ready</span>
+                                </div>
+                                <div class="theme-elevated p-3 rounded-xl border text-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-purple-500 text-base mb-1"></i>
+                                    <span class="block text-[11px] font-bold">AI Hook Variations</span>
+                                    <span class="text-[9px] theme-muted">5 Viral Hooks drafted</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="theme-card border p-6 rounded-2xl shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg mb-4">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2">Omnichannel Visual Composer</h3>
+                            <p class="theme-muted text-xs leading-relaxed">
+                                Draft your master campaign once and let Postall adapt aspect ratios, platform character limits, and media formats automatically for LinkedIn, X, Instagram, TikTok, and YouTube.
+                            </p>
+                        </div>
+
+                        <div class="theme-card border p-6 rounded-2xl shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg mb-4">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2">Drag-and-Drop Visual Content Calendar</h3>
+                            <p class="theme-muted text-xs leading-relaxed">
+                                Visualize your entire monthly marketing output across all clients and brands. Easily drag, reschedule, and balance queue slots during peak audience engagement windows.
+                            </p>
+                        </div>
+
+                        <div class="theme-card border p-6 rounded-2xl shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg mb-4">
+                                <i class="fa-solid fa-film"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2">Centralized Media Asset Vault</h3>
+                            <p class="theme-muted text-xs leading-relaxed">
+                                High-res video archives, promotional banners, and campaign assets remain securely stored in your private container filesystem without paying extra cloud storage tiers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div class="theme-elevated border p-6 rounded-2xl">
+                        <span class="text-3xl font-black text-amber-500 block mb-1">Zero</span>
+                        <h4 class="font-bold text-sm mb-1">Per-Seat Charges</h4>
+                        <p class="theme-muted text-xs">Add your entire creative team, copywriters, and video editors without per-user licensing fees.</p>
+                    </div>
+                    <div class="theme-elevated border p-6 rounded-2xl">
+                        <span class="text-3xl font-black text-emerald-500 block mb-1">Unlimited</span>
+                        <h4 class="font-bold text-sm mb-1">Client Profiles</h4>
+                        <p class="theme-muted text-xs">Run independent social queues for multiple brands and internal clients simultaneously.</p>
+                    </div>
+                    <div class="theme-elevated border p-6 rounded-2xl">
+                        <span class="text-3xl font-black theme-accent block mb-1">100% Private</span>
+                        <h4 class="font-bold text-sm mb-1">Client Confidentiality</h4>
+                        <p class="theme-muted text-xs">Unreleased promotional drafts, embargoed videos, and trade secrets never touch third-party SaaS servers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Integrations Section -->
-        <section id="integrations" class="py-16 border-b theme-elevated">
+        <section id="integrations" class="scroll-mt-28 py-16 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6 text-center">
                 <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-8">Unified Multi-Platform Publishing & AI Integration</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">
@@ -341,29 +499,29 @@
         </section>
 
         <!-- Local LLM AI Section -->
-        <section id="ai" class="py-24 border-b theme-elevated">
+        <section id="ai" class="scroll-mt-28 py-24 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
-                            <i class="fa-solid fa-microchip"></i><span>Privacy-First AI</span>
+                            <i class="fa-solid fa-microchip"></i><span>Privacy-First AI Copywriting</span>
                         </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Powered by Local LLMs. Zero Cloud API Fees.</h2>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Local LLM Ad Copy & Viral Hooks. Zero API Tolls.</h2>
                         <p class="theme-muted text-base mb-8 leading-relaxed">
-                            Stop leaking strategic content and audience prompts to third-party providers. Postall interfaces directly with local runtimes like Ollama so you can generate copy, schedule multi-platform posts, and optimize campaigns entirely on your private infrastructure.
+                            Stop sending unreleased campaign ideas and private brand strategies to external AI APIs. Postall connects directly to local runtimes like Ollama (Llama 3, Mistral) to generate ad copy, hooks, and hashtags on your private hardware.
                         </p>
                         <ul class="space-y-4 text-sm font-medium">
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Complete Air-Gapped Privacy:</strong> Prompts never leave your machine or private server.</span>
+                                <span><strong>Unlimited Copy Variations:</strong> Draft 50+ ad angles without watching token costs.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Zero Rate Limits:</strong> Iterate content models with unlimited inferences.</span>
+                                <span><strong>Zero Telemetry Leakage:</strong> Unannounced client product launches stay confidential.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Custom Models:</strong> Use Llama 3, Mistral, Gemma, or local fine-tunes.</span>
+                                <span><strong>Custom Tone Tuning:</strong> Match brand voice guidelines using custom prompts.</span>
                             </li>
                         </ul>
                     </div>
@@ -371,30 +529,32 @@
                         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600"></div>
                         <h4 class="text-lg font-bold mb-4 flex items-center space-x-2">
                             <i class="fa-solid fa-terminal theme-accent"></i>
-                            <span>Local AI Generation Daemon</span>
+                            <span>Local AI Ad Ideation Daemon</span>
                         </h4>
                         <div class="p-4 rounded-xl border border-stone-800 font-mono text-xs text-amber-300 space-y-2" style="background-color: var(--code-bg);">
-                            <p class="text-stone-500"># Interfacing with local Ollama runtime...</p>
-                            <p>> postall ai generate --model "llama3" --prompt "Draft enterprise rollout"</p>
-                            <p class="text-emerald-400">✓ Context evaluated locally (0ms cloud latency)</p>
-                            <p class="text-stone-200">"Autonomous infrastructure guarantees predictable scaling without telemetry leakage."</p>
+                            <p class="text-stone-500"># Generating viral ad hooks via Ollama (localhost:11434)...</p>
+                            <p>> postall ai hook-gen --n 3 --topic "Agency Content Freedom"</p>
+                            <p class="text-emerald-400">✓ 3 High-CTR Hooks Synthesized (0ms cloud latency)</p>
+                            <p class="text-stone-200">1. "Why top media agencies are ditching $300/mo social schedulers..."</p>
+                            <p class="text-stone-200">2. "Own your content pipeline: The zero-subscription blueprint."</p>
+                            <p class="text-stone-200">3. "How to automate 6 social networks from a single private container."</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- RESTORED: Data Sovereignty & Security Section -->
-        <section id="security" class="py-24 border-b theme-elevated">
+        <!-- Data Sovereignty Section -->
+        <section id="security" class="scroll-mt-28 py-24 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
                             <i class="fa-solid fa-vault"></i><span>Absolute Data Sovereignty</span>
                         </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Your Data Stays Yours. Period.</h2>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Your Media Stays Yours. Period.</h2>
                         <p class="theme-muted text-base mb-8 leading-relaxed">
-                            Unlike third-party SaaS schedulers that store your social credentials and brand strategies on central cloud clusters, Postall runs strictly under your direct custody using encrypted local volume mounts.
+                            Unlike third-party SaaS schedulers that store your social credentials, creative assets, and client analytics on central cloud clusters, Postall runs strictly under your direct custody using encrypted local volume mounts.
                         </p>
                         <ul class="space-y-4 text-sm font-medium">
                             <li class="flex items-center space-x-3">
@@ -403,7 +563,7 @@
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Isolated State Guard:</strong> Docker named volumes isolate records from crashes.</span>
+                                <span><strong>Isolated State Guard:</strong> Docker named volumes isolate records from host restarts.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
@@ -432,47 +592,8 @@
             </div>
         </section>
 
-        <!-- Capabilities Section -->
-        <section id="features" class="py-24 border-b theme-elevated">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center max-w-2xl mx-auto mb-16">
-                    <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-3">Enterprise Capabilities</h2>
-                    <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Engineered for Unattended Operations</h3>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="theme-card border rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-300 shadow-lg">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center theme-accent text-2xl mb-6 shadow-inner">
-                            <i class="fa-solid fa-cloud-arrow-down"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-3">Silent OTA Updates</h4>
-                        <p class="theme-muted text-sm leading-relaxed">
-                            Autonomous background daemons poll GitHub manifests, verify SHA-256 patch signatures, and safely self-patch without restarting downtime.
-                        </p>
-                    </div>
-                    <div class="theme-card border rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-300 shadow-lg">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center theme-accent text-2xl mb-6 shadow-inner">
-                            <i class="fa-solid fa-database"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-3">POSIX Volume Safeguards</h4>
-                        <p class="theme-muted text-sm leading-relaxed">
-                            Docker named volumes (<code class="theme-accent font-mono text-xs">postall_data</code>) eliminate Windows filesystem locking errors across SQLite ledgers.
-                        </p>
-                    </div>
-                    <div class="theme-card border rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-300 shadow-lg">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center theme-accent text-2xl mb-6 shadow-inner">
-                            <i class="fa-solid fa-gauge-high"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-3">Predictable Resource Ceilings</h4>
-                        <p class="theme-muted text-sm leading-relaxed">
-                            Strict resource governance limits memory allocation to 1536MB and 2 CPUs, guaranteeing smooth co-existence with existing machines.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Multi-OS Deployment Section -->
-        <section id="download" class="py-24 border-b theme-elevated">
+        <section id="download" class="scroll-mt-28 py-24 border-b theme-elevated">
             <div class="max-w-4xl mx-auto px-6">
                 <div class="theme-card border rounded-3xl p-8 sm:p-14 shadow-2xl backdrop-blur-xl relative overflow-hidden">
                     <div class="text-center max-w-xl mx-auto mb-10 relative z-10">
@@ -480,15 +601,15 @@
                         <p class="theme-muted text-sm">Select your operating system environment to copy the automated bootstrap deployment command.</p>
                     </div>
 
-                    <!-- OS Tab Selector Buttons -->
-                    <div class="flex justify-center space-x-3 mb-6 relative z-10">
-                        <button onclick="switchTab('win')" id="tabWin" class="px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20">
+                    <!-- Responsive Wrapping OS Tab Selector Buttons -->
+                    <div class="flex flex-wrap justify-center gap-2.5 mb-6 relative z-10">
+                        <button onclick="switchTab('win')" id="tabWin" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20">
                             <i class="fa-brands fa-windows"></i><span>Windows (PowerShell)</span>
                         </button>
-                        <button onclick="switchTab('linux')" id="tabLinux" class="px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
+                        <button onclick="switchTab('linux')" id="tabLinux" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
                             <i class="fa-brands fa-linux"></i><span>Linux (Bash)</span>
                         </button>
-                        <button onclick="switchTab('mac')" id="tabMac" class="px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
+                        <button onclick="switchTab('mac')" id="tabMac" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
                             <i class="fa-brands fa-apple"></i><span>macOS (Zsh)</span>
                         </button>
                     </div>
@@ -518,7 +639,7 @@
         </section>
 
         <!-- Contact Us Section -->
-        <section id="contact" class="py-24">
+        <section id="contact" class="scroll-mt-28 py-24">
             <div class="max-w-4xl mx-auto px-6">
                 <div class="theme-card border rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
                     <div class="text-center max-w-xl mx-auto mb-10">
@@ -526,23 +647,23 @@
                             <i class="fa-solid fa-envelope"></i><span>Direct Support & Inquiries</span>
                         </div>
                         <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Connect With the Team</h2>
-                        <p class="theme-muted text-sm">Have questions about self-hosting, early SaaS access, or custom social pipelines? Reach out directly.</p>
+                        <p class="theme-muted text-sm">Have questions about setting up multi-brand pipelines, custom video formats, or early Cloud SaaS access? Reach out directly.</p>
                     </div>
 
                     <div class="grid sm:grid-cols-3 gap-4 mb-8">
                         <div class="theme-elevated border p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-cloud-arrow-up theme-accent text-lg mb-2"></i>
-                            <h4 class="text-xs font-bold mb-1">SaaS Waitlist</h4>
+                            <h4 class="text-xs font-bold mb-1">Agency SaaS Waitlist</h4>
                             <p class="text-[11px] theme-muted">Early bird priority for cloud clusters.</p>
                         </div>
                         <div class="theme-elevated border p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-code-pull-request theme-accent text-lg mb-2"></i>
-                            <h4 class="text-xs font-bold mb-1">Feature Requests</h4>
-                            <p class="text-[11px] theme-muted">Propose new network connectors.</p>
+                            <h4 class="text-xs font-bold mb-1">Custom Media Connectors</h4>
+                            <p class="text-[11px] theme-muted">Propose new network APIs.</p>
                         </div>
                         <div class="theme-elevated border p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-shield-halved theme-accent text-lg mb-2"></i>
-                            <h4 class="text-xs font-bold mb-1">Security & Bugs</h4>
+                            <h4 class="text-xs font-bold mb-1">Security & Inquiries</h4>
                             <p class="text-[11px] theme-muted">Direct patch reports and triage.</p>
                         </div>
                     </div>
@@ -578,9 +699,8 @@
         <p>&copy; 2026 Postall Enterprise Systems. All rights reserved. Secured & Maintained via GitHub OTA Channels.</p>
     </footer>
 
-    <!-- Interactive Logic (OS Switcher, Theme Switcher, Toast Dismiss, & Native Chatbot Engine) -->
+    <!-- Interactive Script with Robust Parsing -->
     <script>
-        // OS Commands Matrix
         const commands = {
             win: {
                 cmd: "irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex",
@@ -606,9 +726,9 @@
             ['win', 'linux', 'mac'].forEach(key => {
                 const btn = document.getElementById('tab' + key.charAt(0).toUpperCase() + key.slice(1));
                 if (key === os) {
-                    btn.className = "px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20";
+                    btn.className = "px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20";
                 } else {
-                    btn.className = "px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500";
+                    btn.className = "px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500";
                 }
             });
 
@@ -656,7 +776,6 @@
             if (toast) toast.style.display = 'none';
         }
 
-        // Theme Toggle Logic
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             const icon = document.getElementById('themeIcon');
@@ -678,7 +797,7 @@
         applyTheme(savedTheme);
 
         // ==========================================
-        // Native Client-Side Chatbot Concierge Engine
+        // Robust Chatbot Concierge Engine
         // ==========================================
         let isChatOpen = false;
 
@@ -712,7 +831,7 @@
 
             if (sender === 'user') {
                 msgRow.innerHTML = `
-                    <div class="p-3 rounded-2xl rounded-tr-sm max-w-[85%] font-medium" style="background-color: var(--chat-user-bg); color: var(--chat-user-text);">
+                    <div class="p-3 rounded-2xl rounded-tr-sm max-w-[85%] font-medium chat-bubble-content shadow-sm" style="background-color: var(--chat-user-bg); color: var(--chat-user-text);">
                         <p class="leading-relaxed">${text}</p>
                     </div>
                 `;
@@ -721,8 +840,8 @@
                     <div class="w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <div class="p-3 rounded-2xl rounded-tl-sm border max-w-[85%]" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
-                        <p class="leading-relaxed">${text}</p>
+                    <div class="p-3 rounded-2xl rounded-tl-sm border max-w-[85%] chat-bubble-content shadow-sm" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
+                        <div class="leading-relaxed">${text}</div>
                     </div>
                 `;
             }
@@ -751,11 +870,10 @@
             const q = query.toLowerCase();
             const container = document.getElementById('chatMessages');
 
-            // Temporary Typing Indicator
             const typingIndicator = document.createElement('div');
             typingIndicator.id = 'typingIndicator';
             typingIndicator.className = 'flex items-center space-x-2 text-stone-500 text-[10px] pl-8';
-            typingIndicator.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i><span>Processing...</span>';
+            typingIndicator.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i><span>Processing query...</span>';
             container.appendChild(typingIndicator);
             container.scrollTop = container.scrollHeight;
 
@@ -765,26 +883,35 @@
 
                 let reply = "";
 
-                if (q.includes('install') || q.includes('deploy') || q.includes('command') || q.includes('run') || q.includes('script')) {
-                    reply = "To deploy Postall on Windows PowerShell, run:<br><code class='text-amber-400 font-mono text-[10px] block mt-1 bg-black/40 p-1.5 rounded'>irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex</code><br>It provisions Docker volumes and boots the engine automatically!";
-                } else if (q.includes('req') || q.includes('spec') || q.includes('ram') || q.includes('cpu') || q.includes('memory') || q.includes('hardware')) {
-                    reply = "<strong>Postall System Specifications:</strong><br>• Docker Desktop or Docker Engine<br>• 1536 MB RAM (Strict RAM limit)<br>• 2 Virtual CPUs<br>• Lightweight storage persistent via named volumes.";
-                } else if (q.includes('volume') || q.includes('sqlite') || q.includes('permission') || q.includes('lock') || q.includes('docker')) {
-                    reply = "Postall avoids Windows SQLite file-locking by mounting named Docker volumes (<code class='text-amber-400 font-mono'>postall_data</code>) rather than direct bind mounts. This preserves WAL journal write transactions without disk access collisions.";
-                } else if (q.includes('llm') || q.includes('ai') || q.includes('ollama') || q.includes('model') || q.includes('llama')) {
-                    reply = "Postall interfaces directly with local runtimes like <strong>Ollama</strong> (supporting Llama 3, Mistral, and custom weights). Your prompts, brand drafts, and captions stay completely on your hardware with 0 API tokens.";
-                } else if (q.includes('saas') || q.includes('cloud') || q.includes('host') || q.includes('waitlist')) {
-                    reply = "The fully managed <strong>Postall Cloud SaaS</strong> cluster is currently in active staging! You can reserve priority beta access in our Contact section or by emailing <code class='text-amber-400 font-mono'>contact.postall@gmail.com</code>.";
-                } else if (q.includes('ota') || q.includes('update') || q.includes('version') || q.includes('patch')) {
-                    reply = "Postall v4.0.4 includes silent background OTA updates. The container checks the GitHub version oracle for signed SHA-256 archives and applies delta patches automatically without system restarts.";
-                } else if (q.includes('contact') || q.includes('email') || q.includes('support') || q.includes('bug')) {
-                    reply = "You can contact our core engineering team directly at <code class='text-amber-400 font-mono'>contact.postall@gmail.com</code> or submit feature requests through our GitHub Releases repository.";
+                // Intent Routing with Compound Keyword Checks
+                if (q.includes('linux') || q.includes('mac') || q.includes('ubuntu') || q.includes('bash') || q.includes('zsh')) {
+                    reply = "To deploy Postall on <strong>Linux or macOS</strong>, run:<span class='chat-code-snippet'>curl -sSL https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh | bash</span>This provisions your POSIX Docker volume and executes the background service safely.";
+                } else if (q.includes('windows') || q.includes('powershell')) {
+                    reply = "To deploy Postall on <strong>Windows PowerShell</strong>, run:<span class='chat-code-snippet'>irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex</span>It configures named volumes (<code class='theme-accent font-mono'>postall_data</code>) to eliminate SQLite file-locking issues.";
+                } else if (q.includes('install') || q.includes('deploy') || q.includes('command') || q.includes('setup')) {
+                    reply = "Postall supports 1-click deployment across all major OS environments:<br>• <strong>Windows:</strong> PowerShell <code class='theme-accent font-mono'>irm ... | iex</code><br>• <strong>Linux / Mac:</strong> Bash <code class='theme-accent font-mono'>curl -sSL ... | bash</code><br>Select your OS tab in the Deployment section above for one-click copy!";
+                } else if (q.includes('mixpost') || q.includes('postiz') || q.includes('buffer') || q.includes('hootsuite') || q.includes('competitor') || q.includes('compare') || q.includes('vs')) {
+                    reply = "<strong>How Postall compares to Postiz & Mixpost:</strong><br>• <strong>Zero Complex Stacks:</strong> Operates as a single lightweight container (under 1.5GB RAM) without requiring external PostgreSQL, Redis, or Temporal clusters.<br>• <strong>Native Local LLMs:</strong> Interconnects directly with private Ollama daemons for air-gapped AI post generation.<br>• <strong>Zero-Touch Silent Updates:</strong> Auto-patches background dependencies via GitHub delta hashes.";
+                } else if (q.includes('price') || q.includes('cost') || q.includes('free') || q.includes('fee') || q.includes('license')) {
+                    reply = "<strong>100% Free & Self-Hosted:</strong> Postall Core has zero per-seat licensing fees, zero monthly platform subscriptions, and no limits on connected accounts. You only pay for your own hosting infrastructure.";
+                } else if (q.includes('format') || q.includes('video') || q.includes('image') || q.includes('media') || q.includes('file')) {
+                    reply = "<strong>Supported Media & Video Formats:</strong><br>• <strong>Videos:</strong> MP4, WebM, MOV (automatic 9:16 vertical encoding for Reels & Shorts)<br>• <strong>Images:</strong> PNG, JPG, WebP, GIF<br>• <strong>Documents:</strong> Multi-page PDF carousels for LinkedIn<br>All media is stored locally in your private Docker volume.";
+                } else if (q.includes('ollama') || q.includes('llm') || q.includes('ai') || q.includes('model') || q.includes('llama')) {
+                    reply = "<strong>Local AI Architecture:</strong><br>Postall interfaces with your local Ollama daemon at <code class='theme-accent font-mono'>http://localhost:11434</code> (or custom IP). It natively supports Llama 3, Mistral, Gemma, and custom fine-tunes to generate viral hooks and captions without sending prompts to cloud APIs.";
+                } else if (q.includes('agency') || q.includes('client') || q.includes('brand') || q.includes('team')) {
+                    reply = "<strong>Agency Workflow Benefits:</strong><br>• Segregated campaign queues for unlimited clients.<br>• No seat fees for copywriters or video editors.<br>• Unreleased embargoed assets remain strictly inside your private network.";
+                } else if (q.includes('volume') || q.includes('sqlite') || q.includes('lock') || q.includes('docker')) {
+                    reply = "Postall avoids Windows filesystem locking by mounting Docker named volumes (<code class='theme-accent font-mono'>postall_data</code>) rather than host folder bind-mounts. This guarantees SQLite WAL journal stability without disk write collisions.";
+                } else if (q.includes('spec') || q.includes('ram') || q.includes('cpu') || q.includes('req') || q.includes('hardware')) {
+                    reply = "<strong>Minimum System Specifications:</strong><br>• Docker Engine / Desktop (Linux Containers)<br>• 1536 MB RAM limit enforced<br>• 2 Virtual CPUs<br>• 10 GB disk space for media caching.";
+                } else if (q.includes('saas') || q.includes('cloud') || q.includes('waitlist')) {
+                    reply = "The managed <strong>Postall Cloud SaaS</strong> edition is currently in active staging for users wanting zero-server maintenance. Send an inquiry to <code class='theme-accent font-mono'>contact.postall@gmail.com</code> for priority beta access!";
                 } else {
-                    reply = "I specialize in Postall self-hosting architectures, Local LLM setup, and deployment troubleshooting. Try asking about <em>'System Specs'</em>, <em>'How to install'</em>, <em>'Docker volumes'</em>, or <em>'Local AI'</em>!";
+                    reply = "I specialize in Postall self-hosting, agency media workflows, and local AI setup. Try asking: <em>'How to install on Linux'</em>, <em>'Postall vs Mixpost'</em>, <em>'Supported video formats'</em>, or <em>'How does Ollama connect?'</em>";
                 }
 
                 appendMessage('bot', reply);
-            }, 450);
+            }, 350);
         }
     </script>
 </body>
