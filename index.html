@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postall | Autonomous Social Architecture & Creative Media Studio</title>
-    <meta name="description" content="Self-hosted social media automation, omnichannel post creation, media asset management, and private local AI content generation for agencies and creators.">
+    <title>Postall | Self-hosted social publishing</title>
+    <meta name="description" content="Explore Postall's self-hosted social publishing workflow, Docker deployment options, listed network integrations, and optional local AI approach.">
+    <meta name="theme-color" content="#090807">
+    <meta property="og:title" content="Postall | Self-hosted social publishing">
+    <meta property="og:description" content="Explore Postall's self-hosted publishing workflow, deployment options, and local AI approach.">
+    <meta property="og:type" content="website">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -117,6 +121,7 @@
             word-break: break-word;
             overflow-wrap: anywhere;
             max-width: 100%;
+            white-space: pre-wrap;
         }
 
         .chat-code-snippet {
@@ -144,39 +149,31 @@
             background: var(--border-subtle);
             border-radius: 4px;
         }
+
+        :focus-visible {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-luxury-grid selection:bg-amber-500 selection:text-stone-950 flex flex-col justify-between">
 
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-amber-500 focus:px-4 focus:py-2 focus:font-bold focus:text-stone-950">Skip to content</a>
     <div class="ambient-glow"></div>
 
-    <!-- Floating SaaS Announcement Toast (Responsive Non-Colliding Layout) -->
-    <aside id="saasToast" aria-label="Product announcement" class="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-40 max-w-[calc(100vw-2rem)] sm:max-w-sm p-4 rounded-2xl theme-card border shadow-2xl backdrop-blur-xl transition-all duration-300">
-        <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-[11px] font-mono uppercase tracking-wider font-bold theme-accent">v4.0.4 Stable Live</span>
-            </div>
-            <button onclick="dismissToast()" class="theme-muted hover:text-amber-500 text-xs p-1 rounded-md transition" title="Dismiss">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <p class="text-xs theme-muted mt-2 leading-relaxed">
-            Need multi-brand team collaboration without managing servers? <strong>Postall Managed Cloud</strong> is launching soon.
-        </p>
-        <div class="mt-3 flex items-center justify-between pt-2 border-t theme-elevated">
-            <a href="#contact" class="text-xs font-semibold theme-accent hover:underline flex items-center space-x-1">
-                <span>Join Agency Waitlist</span>
-                <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </a>
-            <span class="text-[10px] theme-muted opacity-70">No credit card needed</span>
-        </div>
-    </aside>
-
     <!-- Floating Native Concierge Bot -->
-    <div class="fixed bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end">
+    <div class="fixed bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end" aria-live="polite">
         <!-- Chat Window Panel -->
-        <div id="chatWidget" class="hidden w-[380px] max-w-[calc(100vw-2rem)] h-[530px] max-h-[82vh] rounded-3xl theme-card border shadow-2xl backdrop-blur-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 scale-95 opacity-0">
+        <section id="chatWidget" role="dialog" aria-labelledby="chatTitle" aria-modal="false" aria-hidden="true" class="hidden w-[380px] max-w-[calc(100vw-3rem)] h-[min(620px,82vh)] rounded-3xl theme-card border shadow-2xl backdrop-blur-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 scale-95 opacity-0">
             <!-- Header -->
             <div class="p-4 border-b theme-elevated flex items-center justify-between">
                 <div class="flex items-center space-x-3">
@@ -184,73 +181,68 @@
                         <i class="fa-solid fa-robot"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-bold leading-tight flex items-center space-x-1.5">
-                            <span>Postall Concierge</span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>
-                        </h3>
-                        <span class="text-[10px] theme-muted">Instant Assistant & Setup Guide</span>
+                        <h3 id="chatTitle" class="text-xs font-bold leading-tight">Postall Product Guide</h3>
+                        <span class="text-[10px] theme-muted">Instant answers · Runs in your browser</span>
                     </div>
                 </div>
-                <button onclick="toggleChat()" class="theme-muted hover:text-amber-500 text-xs p-1.5 rounded-lg transition" title="Close chat">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <div class="flex items-center gap-1">
+                    <button type="button" onclick="clearChat()" class="theme-muted hover:text-amber-500 text-xs p-1.5 rounded-lg transition" aria-label="Start a new conversation" title="New conversation">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                    <button type="button" onclick="toggleChat(false)" class="theme-muted hover:text-amber-500 text-xs p-1.5 rounded-lg transition" aria-label="Close product guide" title="Close guide">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Messages Stream -->
-            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 chat-scroll text-xs">
+            <div id="chatMessages" role="log" aria-live="polite" aria-relevant="additions text" class="flex-1 p-4 overflow-y-auto space-y-3 chat-scroll text-xs">
                 <div class="flex items-start space-x-2">
                     <div class="w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
                     <div class="p-3 rounded-2xl rounded-tl-sm border max-w-[85%] chat-bubble-content" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
-                        <p class="leading-relaxed">Welcome to Postall! Ask me anything about multi-platform publishing, local AI models, system specs, or deployment commands.</p>
+                        <p class="leading-relaxed">Hi! I can explain the features described on this page, walk through the included Docker setup scripts, and point you to the right section. I’m a built-in product guide, not a live AI or support agent.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottom Docked Quick Chips -->
-            <div class="px-3 py-2 border-t theme-elevated flex gap-1.5 overflow-x-auto whitespace-nowrap chat-scroll bg-black/10">
-                <button onclick="sendQuickPrompt('How does Media & Post Creation work?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                    🎨 Media Creation
-                </button>
-                <button onclick="sendQuickPrompt('Compare Postall vs Mixpost / Postiz')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                    ⚖️ Postall vs Competitors
-                </button>
-                <button onclick="sendQuickPrompt('How to install on Windows?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                    🪟 Windows Setup
-                </button>
-                <button onclick="sendQuickPrompt('How to install on Linux / Mac?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                    🐧 Linux / Mac Setup
-                </button>
-                <button onclick="sendQuickPrompt('How do Local LLMs connect?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:theme-accent hover:border-amber-500/40 transition">
-                    🤖 Local Ollama Setup
-                </button>
+            <div class="px-3 py-2 border-t theme-elevated">
+                <p class="text-[10px] uppercase tracking-wider font-bold theme-muted mb-2">Explore a topic</p>
+                <div class="flex gap-1.5 overflow-x-auto whitespace-nowrap chat-scroll">
+                    <button type="button" onclick="sendQuickPrompt('How does deployment work?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:text-amber-500 hover:border-amber-500/40 transition">Deployment</button>
+                    <button type="button" onclick="sendQuickPrompt('What does the page say about privacy and security?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:text-amber-500 hover:border-amber-500/40 transition">Privacy</button>
+                    <button type="button" onclick="sendQuickPrompt('Which social networks are listed?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:text-amber-500 hover:border-amber-500/40 transition">Networks</button>
+                    <button type="button" onclick="sendQuickPrompt('How does local AI work?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:text-amber-500 hover:border-amber-500/40 transition">Local AI</button>
+                    <button type="button" onclick="sendQuickPrompt('How can I get help?')" class="text-[10.5px] px-2.5 py-1 rounded-full theme-elevated border theme-muted hover:text-amber-500 hover:border-amber-500/40 transition">Support</button>
+                </div>
             </div>
 
             <!-- Input Footer Form -->
             <form onsubmit="handleChatSubmit(event)" class="p-3 border-t theme-elevated flex items-center space-x-2">
-                <input id="chatInput" type="text" placeholder="Ask about Linux, video formats, Ollama..." autocomplete="off" class="flex-1 bg-transparent px-3 py-2 text-xs rounded-xl border theme-card focus:outline-none focus:border-amber-500 transition text-[var(--text-main)] placeholder:opacity-60" />
-                <button type="submit" class="bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 font-bold px-3 py-2 rounded-xl text-xs hover:opacity-90 transition shadow-md flex items-center justify-center">
+                <label for="chatInput" class="sr-only">Ask the Postall product guide</label>
+                <input id="chatInput" type="text" maxlength="300" placeholder="Ask about setup, privacy, features..." autocomplete="off" class="flex-1 bg-transparent px-3 py-2 text-xs rounded-xl border theme-card focus:outline-none focus:border-amber-500 transition text-[var(--text-main)] placeholder:opacity-60" />
+                <button type="submit" aria-label="Send message" class="bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 font-bold px-3 py-2 rounded-xl text-xs hover:opacity-90 transition shadow-md flex items-center justify-center">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
-        </div>
+        </section>
 
         <!-- Floating Chat Launcher Button -->
-        <button onclick="toggleChat()" id="chatLauncher" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-600 text-stone-950 flex items-center justify-center shadow-xl shadow-amber-600/30 font-bold text-lg hover:scale-105 active:scale-95 transition-all duration-200">
+        <button type="button" onclick="toggleChat()" id="chatLauncher" aria-label="Open Postall product guide" aria-expanded="false" aria-controls="chatWidget" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-600 text-stone-950 flex items-center justify-center shadow-xl shadow-amber-600/30 font-bold text-lg hover:scale-105 active:scale-95 transition-all duration-200">
             <i id="launcherIcon" class="fa-solid fa-comment-dots"></i>
         </button>
     </div>
 
-    <div class="relative z-10 flex flex-col flex-grow">
+    <main id="main-content" class="relative z-10 flex flex-col flex-grow">
         <!-- Navigation Header (Fixed Breakpoint & Layout) -->
         <header class="border-b theme-elevated sticky top-0 z-40 backdrop-blur-xl bg-opacity-80 transition-colors">
-            <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-600 flex items-center justify-center font-black text-stone-950 shadow-lg shadow-amber-600/20 text-lg">P</div>
                     <div>
                         <span class="font-extrabold tracking-tight text-lg block text-brand-gradient">Postall</span>
-                        <span class="text-[10px] theme-accent tracking-wider uppercase font-bold">Self-Hosted Core</span>
+                        <span class="hidden sm:block whitespace-nowrap text-[10px] theme-accent tracking-wider uppercase font-bold">Self-hosted</span>
                     </div>
                 </div>
 
@@ -260,20 +252,32 @@
                     <a href="#dashboard" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Dashboard</a>
                     <a href="#integrations" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Networks</a>
                     <a href="#ai" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Local AI</a>
-                    <a href="#security" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Data Sovereignty</a>
+                    <a href="#security" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Data & Privacy</a>
                     <a href="#download" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Deploy</a>
                     <a href="#contact" class="hover:text-amber-600 dark:hover:text-amber-400 transition">Contact</a>
                 </nav>
 
                 <div class="flex items-center space-x-3">
+                    <button type="button" onclick="toggleMobileNav()" id="mobileNavToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNav" class="lg:hidden p-2.5 rounded-xl border theme-elevated theme-muted hover:text-amber-500 transition">
+                        <i id="mobileNavIcon" class="fa-solid fa-bars"></i>
+                    </button>
                     <button onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle Theme" class="p-2.5 rounded-xl border theme-elevated theme-muted hover:text-amber-600 dark:hover:text-amber-400 transition shadow-sm flex items-center justify-center">
                         <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
                     </button>
                     <a href="#download" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-600/20 border border-amber-400/30 whitespace-nowrap">
-                        Get Started Free
+                        Deployment guide
                     </a>
                 </div>
             </div>
+            <nav id="mobileNav" aria-label="Mobile navigation" class="hidden lg:hidden max-w-7xl mx-auto px-6 pb-4 grid grid-cols-2 gap-2 text-sm theme-muted font-medium">
+                <a onclick="closeMobileNav()" href="#creative-studio" class="rounded-lg px-3 py-2 theme-elevated">Creative Studio</a>
+                <a onclick="closeMobileNav()" href="#dashboard" class="rounded-lg px-3 py-2 theme-elevated">Dashboard</a>
+                <a onclick="closeMobileNav()" href="#integrations" class="rounded-lg px-3 py-2 theme-elevated">Networks</a>
+                <a onclick="closeMobileNav()" href="#ai" class="rounded-lg px-3 py-2 theme-elevated">Local AI</a>
+                <a onclick="closeMobileNav()" href="#security" class="rounded-lg px-3 py-2 theme-elevated">Data & privacy</a>
+                <a onclick="closeMobileNav()" href="#download" class="rounded-lg px-3 py-2 theme-elevated">Deploy</a>
+                <a onclick="closeMobileNav()" href="#contact" class="rounded-lg px-3 py-2 theme-elevated col-span-2">Contact</a>
+            </nav>
         </header>
 
         <!-- Hero Section -->
@@ -290,19 +294,34 @@
                 </h1>
                 
                 <p class="theme-muted text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-                    The self-hosted social operations hub built for <strong>media creators, agencies, and brands</strong>. Design omnichannel campaigns, generate viral copy with private Local AI, and automate publishing across every network with zero monthly seat subscriptions.
+                    Postall is a self-hosted application distributed as a Docker image. Explore the campaign workflow, networks listed by the project, optional local AI approach, and OS-specific setup scripts. Hosting and third-party platform or API costs may apply.
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
                     <a href="#download" class="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-bold px-8 py-4 rounded-xl text-sm transition shadow-xl shadow-amber-600/20 flex items-center justify-center space-x-3 border border-amber-400/30">
                         <i class="fa-solid fa-bolt text-stone-950"></i>
-                        <span>Deploy in 1-Click</span>
+                        <span>Choose your deployment</span>
                     </a>
                     <a href="#creative-studio" class="w-full sm:w-auto theme-card border hover:border-amber-500/50 font-medium px-7 py-4 rounded-xl text-sm transition backdrop-blur flex items-center justify-center space-x-3">
                         <i class="fa-solid fa-wand-magic-sparkles theme-accent"></i>
                         <span>Explore Creative Studio</span>
                     </a>
                 </div>
+
+                <aside id="saasToast" aria-label="Deployment information" class="max-w-3xl mx-auto mb-12 p-4 rounded-2xl theme-card border text-left flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-circle-info theme-accent mt-0.5"></i>
+                        <p class="text-xs theme-muted leading-relaxed">
+                            <strong class="theme-main">Self-hosted setup:</strong> Docker is required. Review the setup script before running it.
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-4">
+                        <a href="#download" class="text-xs font-semibold theme-accent hover:underline whitespace-nowrap">View deployment options <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                        <button type="button" onclick="dismissToast()" class="theme-muted hover:text-amber-500 text-xs p-1 rounded-md transition" aria-label="Dismiss deployment information" title="Dismiss">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </aside>
 
                 <!-- Visual Dashboard Preview Mockup (With scroll-mt anchor) -->
                 <div id="dashboard" class="scroll-mt-28 theme-card border rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl relative max-w-4xl mx-auto">
@@ -311,33 +330,33 @@
                             <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
                             <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
                             <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                            <span class="ml-2 font-mono opacity-60">https://localhost:8000/dashboard</span>
+                            <span class="ml-2 font-mono opacity-60">Interface preview · example data</span>
                         </div>
                         <span class="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="font-bold">Omnichannel Engine Ready</span>
+                            <span class="font-bold">Illustrative preview</span>
                         </span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-left">
                         <div class="theme-elevated border rounded-xl p-4">
-                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Active Channels</span>
-                            <span class="text-2xl font-black theme-accent">6 Networks</span>
-                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-1"><i class="fa-solid fa-check mr-1"></i>Cross-Post Ready</span>
+                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Networks listed</span>
+                            <span class="text-2xl font-black theme-accent">6 channels</span>
+                            <span class="text-[10px] theme-muted font-semibold block mt-1">See availability note below</span>
                         </div>
                         <div class="theme-elevated border rounded-xl p-4">
-                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Media Pipeline</span>
-                            <span class="text-2xl font-black">4K & Reels</span>
-                            <span class="text-[10px] theme-accent font-semibold block mt-1">Aspect Auto-Format</span>
+                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Creative workflow</span>
+                            <span class="text-2xl font-black">Campaigns</span>
+                            <span class="text-[10px] theme-muted font-semibold block mt-1">Preview shown below</span>
                         </div>
                         <div class="theme-elevated border rounded-xl p-4">
-                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Scheduled Campaigns</span>
-                            <span class="text-2xl font-black">24 Active</span>
-                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-1">Autonomous Dispatch</span>
+                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Publishing workflow</span>
+                            <span class="text-2xl font-black">Plan & queue</span>
+                            <span class="text-[10px] theme-muted font-semibold block mt-1">Check release capabilities</span>
                         </div>
                         <div class="theme-elevated border rounded-xl p-4">
-                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Data Privacy</span>
-                            <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">100% Local</span>
-                            <span class="text-[10px] theme-muted font-semibold block mt-1">Zero Cloud Telemetry</span>
+                            <span class="text-[11px] theme-muted uppercase tracking-wider block mb-1 font-semibold">Deployment model</span>
+                            <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">Self-hosted</span>
+                            <span class="text-[10px] theme-muted font-semibold block mt-1">You manage the host</span>
                         </div>
                     </div>
                 </div>
@@ -349,13 +368,13 @@
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center max-w-3xl mx-auto mb-16">
                     <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
-                        <i class="fa-solid fa-photo-film"></i><span>Creative Production & Ad Agency Engine</span>
+                        <i class="fa-solid fa-photo-film"></i><span>Campaign workflow preview</span>
                     </div>
                     <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
-                        Produce Once. Distribute Everywhere.
+                        Prepare a campaign. Review each channel.
                     </h2>
                     <p class="theme-muted text-base leading-relaxed">
-                        Stop switching between disparate tools to resize creatives, rewrite captions, and queue campaigns. Postall gives your team an integrated visual studio to draft, format, and broadcast media effortlessly.
+                        The page preview illustrates a campaign composer, channel-specific creative variants, and a publishing workflow. Check the current release for the supported formats and exact behavior before adopting it for a production process.
                     </p>
                 </div>
 
@@ -365,10 +384,10 @@
                         <div class="flex items-center justify-between pb-4 border-b theme-elevated mb-6">
                             <div class="flex items-center space-x-2">
                                 <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 theme-accent text-[11px] font-bold">CAMPAIGN COMPOSER</span>
-                                <span class="theme-muted text-xs">Summer Product Launch • Multi-Channel</span>
+                                <span class="theme-muted text-xs">Example campaign · preview only</span>
                             </div>
-                            <span class="text-emerald-500 text-xs font-semibold flex items-center space-x-1">
-                                <i class="fa-solid fa-circle-check"></i><span>Media Optimized</span>
+                            <span class="theme-muted text-xs font-semibold flex items-center space-x-1">
+                                <i class="fa-regular fa-eye"></i><span>Illustrative UI</span>
                             </span>
                         </div>
 
@@ -379,22 +398,22 @@
                                     <span class="text-[10px] theme-muted font-mono">248 / 2,200 chars</span>
                                 </div>
                                 <p class="text-xs leading-relaxed font-sans theme-main">
-                                    "Stop losing 30% of your agency budget to expensive seat licenses. With @Postall, own your content pipeline, automate multi-channel scheduling, and run private AI copy generation locally 🚀✨ #MarketingAutomation #SaaS #ContentStrategy"
+                                    "A single campaign can take many shapes. Draft your message, review the channel-specific version, and check each platform's requirements before publishing."
                                 </p>
                             </div>
 
                             <div class="flex flex-wrap gap-2 pt-1">
                                 <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5 theme-accent border-amber-500/50">
-                                    <i class="fa-brands fa-linkedin text-blue-500"></i><span>LinkedIn (Carousel PDF)</span>
+                                    <i class="fa-brands fa-linkedin text-blue-500"></i><span>LinkedIn</span>
                                 </span>
                                 <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5">
-                                    <i class="fa-brands fa-instagram text-pink-500"></i><span>IG Reel (9:16)</span>
+                                    <i class="fa-brands fa-instagram text-pink-500"></i><span>Instagram</span>
                                 </span>
                                 <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5">
-                                    <i class="fa-brands fa-x-twitter"></i><span>X Thread (Auto-Split)</span>
+                                    <i class="fa-brands fa-x-twitter"></i><span>X</span>
                                 </span>
                                 <span class="px-3 py-1.5 rounded-xl border theme-card text-xs font-semibold flex items-center space-x-1.5">
-                                    <i class="fa-brands fa-youtube text-red-500"></i><span>YT Shorts</span>
+                                    <i class="fa-brands fa-youtube text-red-500"></i><span>YouTube</span>
                                 </span>
                             </div>
 
@@ -402,17 +421,17 @@
                                 <div class="theme-elevated p-3 rounded-xl border text-center">
                                     <i class="fa-solid fa-video text-amber-500 text-base mb-1"></i>
                                     <span class="block text-[11px] font-bold">Hero_Trailer_4k.mp4</span>
-                                    <span class="text-[9px] theme-muted">Auto-encoded for Reels</span>
+                                    <span class="text-[9px] theme-muted">Sample asset</span>
                                 </div>
                                 <div class="theme-elevated p-3 rounded-xl border text-center">
                                     <i class="fa-solid fa-images text-blue-500 text-base mb-1"></i>
                                     <span class="block text-[11px] font-bold">Infographic_Deck.pdf</span>
-                                    <span class="text-[9px] theme-muted">Slide Deck ready</span>
+                                    <span class="text-[9px] theme-muted">Sample asset</span>
                                 </div>
                                 <div class="theme-elevated p-3 rounded-xl border text-center">
                                     <i class="fa-solid fa-wand-magic-sparkles text-purple-500 text-base mb-1"></i>
-                                    <span class="block text-[11px] font-bold">AI Hook Variations</span>
-                                    <span class="text-[9px] theme-muted">5 Viral Hooks drafted</span>
+                                    <span class="block text-[11px] font-bold">Caption concepts</span>
+                                    <span class="text-[9px] theme-muted">Example content</span>
                                 </div>
                             </div>
                         </div>
@@ -423,9 +442,9 @@
                             <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg mb-4">
                                 <i class="fa-solid fa-layer-group"></i>
                             </div>
-                            <h3 class="text-lg font-bold mb-2">Omnichannel Visual Composer</h3>
+                            <h3 class="text-lg font-bold mb-2">Campaign composition</h3>
                             <p class="theme-muted text-xs leading-relaxed">
-                                Draft your master campaign once and let Postall adapt aspect ratios, platform character limits, and media formats automatically for LinkedIn, X, Instagram, TikTok, and YouTube.
+                                The preview shows one campaign prepared for several channels. Confirm supported networks, media handling, and any automatic formatting in the version you install.
                             </p>
                         </div>
 
@@ -433,9 +452,9 @@
                             <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg mb-4">
                                 <i class="fa-solid fa-calendar-days"></i>
                             </div>
-                            <h3 class="text-lg font-bold mb-2">Drag-and-Drop Visual Content Calendar</h3>
+                            <h3 class="text-lg font-bold mb-2">Publishing calendar</h3>
                             <p class="theme-muted text-xs leading-relaxed">
-                                Visualize your entire monthly marketing output across all clients and brands. Easily drag, reschedule, and balance queue slots during peak audience engagement windows.
+                                Plan and review scheduled content from a central workflow. Calendar interactions and scheduling options depend on the current application release.
                             </p>
                         </div>
 
@@ -443,9 +462,9 @@
                             <div class="w-10 h-10 rounded-xl bg-amber-500/10 theme-accent flex items-center justify-center text-lg mb-4">
                                 <i class="fa-solid fa-film"></i>
                             </div>
-                            <h3 class="text-lg font-bold mb-2">Centralized Media Asset Vault</h3>
+                            <h3 class="text-lg font-bold mb-2">Self-managed media storage</h3>
                             <p class="theme-muted text-xs leading-relaxed">
-                                High-res video archives, promotional banners, and campaign assets remain securely stored in your private container filesystem without paying extra cloud storage tiers.
+                                The installer mounts a named Docker volume for application data. Plan storage capacity and backups on the host you manage.
                             </p>
                         </div>
                     </div>
@@ -453,19 +472,19 @@
 
                 <div class="grid md:grid-cols-3 gap-6 text-center">
                     <div class="theme-elevated border p-6 rounded-2xl">
-                        <span class="text-3xl font-black text-amber-500 block mb-1">Zero</span>
-                        <h4 class="font-bold text-sm mb-1">Per-Seat Charges</h4>
-                        <p class="theme-muted text-xs">Add your entire creative team, copywriters, and video editors without per-user licensing fees.</p>
+                        <span class="text-3xl font-black text-amber-500 block mb-1">Self-hosted</span>
+                        <h4 class="font-bold text-sm mb-1">Deployment control</h4>
+                        <p class="theme-muted text-xs">Choose where the Docker container runs and plan for its upkeep, backups, and security.</p>
                     </div>
                     <div class="theme-elevated border p-6 rounded-2xl">
-                        <span class="text-3xl font-black text-emerald-500 block mb-1">Unlimited</span>
-                        <h4 class="font-bold text-sm mb-1">Client Profiles</h4>
-                        <p class="theme-muted text-xs">Run independent social queues for multiple brands and internal clients simultaneously.</p>
+                        <span class="text-3xl font-black text-emerald-500 block mb-1">One view</span>
+                        <h4 class="font-bold text-sm mb-1">Campaign workflow</h4>
+                        <p class="theme-muted text-xs">Explore the campaign and channel concepts shown in the preview; confirm team and account capabilities in the release.</p>
                     </div>
                     <div class="theme-elevated border p-6 rounded-2xl">
-                        <span class="text-3xl font-black theme-accent block mb-1">100% Private</span>
-                        <h4 class="font-bold text-sm mb-1">Client Confidentiality</h4>
-                        <p class="theme-muted text-xs">Unreleased promotional drafts, embargoed videos, and trade secrets never touch third-party SaaS servers.</p>
+                        <span class="text-3xl font-black theme-accent block mb-1">Your host</span>
+                        <h4 class="font-bold text-sm mb-1">Data responsibility</h4>
+                        <p class="theme-muted text-xs">Self-hosting gives you control of the runtime; secure it and review what data connected services receive.</p>
                     </div>
                 </div>
             </div>
@@ -474,7 +493,7 @@
         <!-- Integrations Section -->
         <section id="integrations" class="scroll-mt-28 py-16 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6 text-center">
-                <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-8">Unified Multi-Platform Publishing & AI Integration</h2>
+                <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-8">Social networks named in the project overview</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">
                     <div class="theme-card border py-4 px-6 rounded-xl flex items-center justify-center space-x-2 font-semibold text-sm shadow-sm">
                         <i class="fa-brands fa-linkedin text-blue-500 text-lg"></i><span>LinkedIn</span>
@@ -495,6 +514,9 @@
                         <i class="fa-brands fa-tiktok text-cyan-500 text-lg"></i><span>TikTok</span>
                     </div>
                 </div>
+                <p class="max-w-3xl mx-auto mt-6 text-xs theme-muted leading-relaxed">
+                    These are the networks named on this page, not a guarantee that every account or publishing format is currently supported. Availability depends on the installed release, account type, and each platform's API policies.
+                </p>
             </div>
         </section>
 
@@ -504,24 +526,24 @@
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
-                            <i class="fa-solid fa-microchip"></i><span>Privacy-First AI Copywriting</span>
+                            <i class="fa-solid fa-microchip"></i><span>Optional local AI workflow</span>
                         </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Local LLM Ad Copy & Viral Hooks. Zero API Tolls.</h2>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Explore local language models for draft copy.</h2>
                         <p class="theme-muted text-base mb-8 leading-relaxed">
-                            Stop sending unreleased campaign ideas and private brand strategies to external AI APIs. Postall connects directly to local runtimes like Ollama (Llama 3, Mistral) to generate ad copy, hooks, and hashtags on your private hardware.
+                            This page describes an optional Ollama-based workflow for generating copy ideas. A local model still needs to be installed and resourced on your hardware. Verify the current release's integration details and network behavior before using sensitive prompts.
                         </p>
                         <ul class="space-y-4 text-sm font-medium">
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Unlimited Copy Variations:</strong> Draft 50+ ad angles without watching token costs.</span>
+                                <span><strong>Local model option:</strong> The page names Ollama as a possible runtime.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Zero Telemetry Leakage:</strong> Unannounced client product launches stay confidential.</span>
+                                <span><strong>Review data flows:</strong> Connected social platforms and services have their own data handling.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Custom Tone Tuning:</strong> Match brand voice guidelines using custom prompts.</span>
+                                <span><strong>Check model fit:</strong> Compatibility and quality depend on your model and installed release.</span>
                             </li>
                         </ul>
                     </div>
@@ -529,15 +551,15 @@
                         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600"></div>
                         <h4 class="text-lg font-bold mb-4 flex items-center space-x-2">
                             <i class="fa-solid fa-terminal theme-accent"></i>
-                            <span>Local AI Ad Ideation Daemon</span>
+                            <span>Illustrative local-AI flow</span>
                         </h4>
                         <div class="p-4 rounded-xl border border-stone-800 font-mono text-xs text-amber-300 space-y-2" style="background-color: var(--code-bg);">
-                            <p class="text-stone-500"># Generating viral ad hooks via Ollama (localhost:11434)...</p>
-                            <p>> postall ai hook-gen --n 3 --topic "Agency Content Freedom"</p>
-                            <p class="text-emerald-400">✓ 3 High-CTR Hooks Synthesized (0ms cloud latency)</p>
-                            <p class="text-stone-200">1. "Why top media agencies are ditching $300/mo social schedulers..."</p>
-                            <p class="text-stone-200">2. "Own your content pipeline: The zero-subscription blueprint."</p>
-                            <p class="text-stone-200">3. "How to automate 6 social networks from a single private container."</p>
+                            <p class="text-stone-500"># Example only — not a verified CLI command</p>
+                            <p>&gt; Prompt a local model with a campaign brief</p>
+                            <p class="text-emerald-400">Review draft suggestions before publishing</p>
+                            <p class="text-stone-200">• Adapt tone for the intended audience</p>
+                            <p class="text-stone-200">• Check factual claims and platform rules</p>
+                            <p class="text-stone-200">• Keep credentials out of prompts</p>
                         </div>
                     </div>
                 </div>
@@ -550,24 +572,24 @@
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
-                            <i class="fa-solid fa-vault"></i><span>Absolute Data Sovereignty</span>
+                            <i class="fa-solid fa-vault"></i><span>Self-hosted deployment</span>
                         </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Your Media Stays Yours. Period.</h2>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Control your deployment. Own the operational work.</h2>
                         <p class="theme-muted text-base mb-8 leading-relaxed">
-                            Unlike third-party SaaS schedulers that store your social credentials, creative assets, and client analytics on central cloud clusters, Postall runs strictly under your direct custody using encrypted local volume mounts.
+                            The included scripts run Postall in Docker and store application data in a named volume on the Docker host. Self-hosting gives you control over that environment, but security depends on how you secure, expose, update, and back it up. This page also loads styling and icons from third-party CDNs, and connected services have their own data flows.
                         </p>
                         <ul class="space-y-4 text-sm font-medium">
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Zero Vendor Lock-in:</strong> Access or migrate your SQLite database anytime.</span>
+                                <span><strong>Persistent volume:</strong> The setup scripts mount <code class="font-mono">postall_data</code> at <code class="font-mono">/app/data</code>.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Isolated State Guard:</strong> Docker named volumes isolate records from host restarts.</span>
+                                <span><strong>Backups matter:</strong> Protect the Docker volume before replacing containers or maintaining the host.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Local Secret Vault:</strong> OAuth tokens and keys never leave your container.</span>
+                                <span><strong>Limit exposure:</strong> Keep credentials secure and avoid exposing the app publicly without access controls.</span>
                             </li>
                         </ul>
                     </div>
@@ -575,16 +597,16 @@
                         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600"></div>
                         <h4 class="text-lg font-bold mb-4 flex items-center space-x-2">
                             <i class="fa-solid fa-shield-halved theme-accent"></i>
-                            <span>Enterprise Trust Safeguards</span>
+                            <span>Deployment checklist</span>
                         </h4>
                         <div class="grid grid-cols-2 gap-4 text-center font-mono mt-6">
                             <div class="theme-elevated p-4 rounded-xl border">
-                                <span class="text-emerald-500 text-lg font-bold block">100%</span>
-                                <span class="text-[10px] theme-muted uppercase font-semibold">Data Ownership</span>
+                                <span class="text-emerald-500 text-lg font-bold block">Docker</span>
+                                <span class="text-[10px] theme-muted uppercase font-semibold">Runtime required</span>
                             </div>
                             <div class="theme-elevated p-4 rounded-xl border">
-                                <span class="text-amber-500 text-lg font-bold block">Zero</span>
-                                <span class="text-[10px] theme-muted uppercase font-semibold">Monthly Fees</span>
+                                <span class="text-amber-500 text-lg font-bold block">Backup</span>
+                                <span class="text-[10px] theme-muted uppercase font-semibold">Plan for data</span>
                             </div>
                         </div>
                     </div>
@@ -598,30 +620,34 @@
                 <div class="theme-card border rounded-3xl p-8 sm:p-14 shadow-2xl backdrop-blur-xl relative overflow-hidden">
                     <div class="text-center max-w-xl mx-auto mb-10 relative z-10">
                         <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Deploy Postall Today</h2>
-                        <p class="theme-muted text-sm">Select your operating system environment to copy the automated bootstrap deployment command.</p>
+                        <p class="theme-muted text-sm">Choose an operating system to download the setup script. Review it before running; Docker must be installed and running.</p>
                     </div>
 
                     <!-- Responsive Wrapping OS Tab Selector Buttons -->
-                    <div class="flex flex-wrap justify-center gap-2.5 mb-6 relative z-10">
-                        <button onclick="switchTab('win')" id="tabWin" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20">
+                    <div role="tablist" aria-label="Choose your operating system" class="flex flex-wrap justify-center gap-2.5 mb-6 relative z-10">
+                        <button type="button" role="tab" aria-selected="true" onclick="switchTab('win')" id="tabWin" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20">
                             <i class="fa-brands fa-windows"></i><span>Windows (PowerShell)</span>
                         </button>
-                        <button onclick="switchTab('linux')" id="tabLinux" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
+                        <button type="button" role="tab" aria-selected="false" onclick="switchTab('linux')" id="tabLinux" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
                             <i class="fa-brands fa-linux"></i><span>Linux (Bash)</span>
                         </button>
-                        <button onclick="switchTab('mac')" id="tabMac" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
+                        <button type="button" role="tab" aria-selected="false" onclick="switchTab('mac')" id="tabMac" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 theme-elevated theme-muted border hover:text-amber-500">
                             <i class="fa-brands fa-apple"></i><span>macOS (Zsh)</span>
                         </button>
                     </div>
 
                     <!-- Command Box Container -->
                     <div class="border rounded-2xl p-4 sm:p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-inner relative z-10" style="background-color: var(--code-bg);">
-                        <code id="cmdText" class="text-xs sm:text-sm text-amber-400 font-mono break-all">irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex</code>
+                        <code id="cmdText" aria-live="polite" class="text-xs sm:text-sm text-amber-400 font-mono break-all">Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1' -OutFile 'setup_postall.ps1'</code>
                         <button onclick="copyCommand()" id="copyBtn" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-500 text-stone-950 px-5 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap shadow-md shadow-amber-600/30 flex items-center justify-center space-x-2">
                             <i class="fa-regular fa-copy"></i>
-                            <span>Copy Command</span>
+                            <span>Copy download command</span>
                         </button>
                     </div>
+                    <p class="text-xs theme-muted text-center mb-8 relative z-10">
+                        After reviewing the file, run <code class="font-mono">.\setup_postall.ps1</code> in PowerShell or <code class="font-mono">bash setup_postall.sh</code> in a terminal.
+                    </p>
+                    <p id="actionStatus" role="status" aria-live="polite" class="sr-only"></p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-xs theme-muted relative z-10 font-medium">
                         <a id="downloadLink" href="https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1" download class="hover:text-amber-600 dark:hover:text-amber-400 transition flex items-center space-x-2">
@@ -629,7 +655,7 @@
                             <span id="downloadLinkText">Download PowerShell Script</span>
                         </a>
                         <span class="hidden sm:inline opacity-40">•</span>
-                        <a href="https://github.com/randumduck/Postall_V4-Releases" target="_blank" class="hover:text-amber-600 dark:hover:text-amber-400 transition flex items-center space-x-2">
+                        <a href="https://github.com/randumduck/Postall_V4-Releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-600 dark:hover:text-amber-400 transition flex items-center space-x-2">
                             <i class="fa-solid fa-code-branch theme-accent"></i>
                             <span>Repository Source</span>
                         </a>
@@ -647,24 +673,24 @@
                             <i class="fa-solid fa-envelope"></i><span>Direct Support & Inquiries</span>
                         </div>
                         <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Connect With the Team</h2>
-                        <p class="theme-muted text-sm">Have questions about setting up multi-brand pipelines, custom video formats, or early Cloud SaaS access? Reach out directly.</p>
+                        <p class="theme-muted text-sm">For installation questions, feature feedback, or security reports, reach out directly. Please remove credentials and other secrets from diagnostic details.</p>
                     </div>
 
                     <div class="grid sm:grid-cols-3 gap-4 mb-8">
                         <div class="theme-elevated border p-4 rounded-2xl text-center">
-                            <i class="fa-solid fa-cloud-arrow-up theme-accent text-lg mb-2"></i>
-                            <h4 class="text-xs font-bold mb-1">Agency SaaS Waitlist</h4>
-                            <p class="text-[11px] theme-muted">Early bird priority for cloud clusters.</p>
+                            <i class="fa-solid fa-screwdriver-wrench theme-accent text-lg mb-2"></i>
+                            <h4 class="text-xs font-bold mb-1">Installation help</h4>
+                            <p class="text-[11px] theme-muted">Include your OS and Docker version.</p>
                         </div>
                         <div class="theme-elevated border p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-code-pull-request theme-accent text-lg mb-2"></i>
-                            <h4 class="text-xs font-bold mb-1">Custom Media Connectors</h4>
-                            <p class="text-[11px] theme-muted">Propose new network APIs.</p>
+                            <h4 class="text-xs font-bold mb-1">Feature feedback</h4>
+                            <p class="text-[11px] theme-muted">Share your workflow and use case.</p>
                         </div>
                         <div class="theme-elevated border p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-shield-halved theme-accent text-lg mb-2"></i>
                             <h4 class="text-xs font-bold mb-1">Security & Inquiries</h4>
-                            <p class="text-[11px] theme-muted">Direct patch reports and triage.</p>
+                            <p class="text-[11px] theme-muted">Report issues without sharing secrets.</p>
                         </div>
                     </div>
 
@@ -692,28 +718,31 @@
                 </div>
             </div>
         </section>
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 border-t theme-elevated py-10 text-center text-xs theme-muted">
-        <p>&copy; 2026 Postall Enterprise Systems. All rights reserved. Secured & Maintained via GitHub OTA Channels.</p>
+    <footer class="relative z-10 border-t theme-elevated py-8 px-6 text-center text-xs theme-muted">
+        <p>&copy; 2026 Postall. Self-hosted software; hosting and third-party platform costs may apply.</p>
+        <a href="https://github.com/randumduck/Postall_V4-Releases" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-3 theme-accent hover:underline">
+            <i class="fa-brands fa-github"></i><span>Source, releases & setup scripts</span>
+        </a>
     </footer>
 
     <!-- Interactive Script with Robust Parsing -->
     <script>
         const commands = {
             win: {
-                cmd: "irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex",
+                cmd: "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1' -OutFile 'setup_postall.ps1'",
                 scriptUrl: "https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1",
                 linkText: "Download PowerShell Script"
             },
             linux: {
-                cmd: "curl -sSL https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh | bash",
+                cmd: "curl -fsSL -o setup_postall.sh 'https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh'",
                 scriptUrl: "https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh",
                 linkText: "Download Bash Script"
             },
             mac: {
-                cmd: "curl -sSL https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh | bash",
+                cmd: "curl -fsSL -o setup_postall.sh 'https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh'",
                 scriptUrl: "https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh",
                 linkText: "Download Zsh/Bash Script"
             }
@@ -725,6 +754,7 @@
             currentOs = os;
             ['win', 'linux', 'mac'].forEach(key => {
                 const btn = document.getElementById('tab' + key.charAt(0).toUpperCase() + key.slice(1));
+                btn.setAttribute('aria-selected', String(key === os));
                 if (key === os) {
                     btn.className = "px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-yellow-600 text-stone-950 shadow-lg shadow-amber-600/20";
                 } else {
@@ -737,27 +767,62 @@
             document.getElementById('downloadLinkText').innerText = commands[os].linkText;
         }
 
-        function copyCommand() {
-            const text = commands[currentOs].cmd;
-            navigator.clipboard.writeText(text);
-            const btn = document.getElementById('copyBtn');
-            btn.innerHTML = '<i class="fa-solid fa-check text-stone-950"></i><span>Copied!</span>';
-            btn.classList.remove('bg-amber-600', 'hover:bg-amber-500');
-            btn.classList.add('bg-emerald-500');
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return;
+                } catch (error) {
+                    console.warn('Clipboard API unavailable; trying the browser fallback.', error);
+                }
+            }
+
+            const field = document.createElement('textarea');
+            field.value = text;
+            field.setAttribute('readonly', '');
+            field.style.position = 'fixed';
+            field.style.opacity = '0';
+            document.body.appendChild(field);
+            field.select();
+            const copied = document.execCommand('copy');
+            field.remove();
+            if (!copied) throw new Error('The browser denied clipboard access.');
+        }
+
+        function announceAction(message) {
+            document.getElementById('actionStatus').textContent = message;
+        }
+
+        async function copyCommand() {
+            const button = document.getElementById('copyBtn');
+            try {
+                await copyText(commands[currentOs].cmd);
+                button.querySelector('span').textContent = 'Copied';
+                button.classList.add('bg-emerald-500');
+                announceAction('Download command copied. Review the downloaded setup script before running it.');
+            } catch (error) {
+                console.error('Could not copy the setup command.', error);
+                announceAction('Copy failed. Select the command and copy it manually.');
+            }
             setTimeout(() => {
-                btn.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copy Command</span>';
-                btn.classList.remove('bg-emerald-500');
-                btn.classList.add('bg-amber-600', 'hover:bg-amber-500');
+                button.querySelector('span').textContent = 'Copy download command';
+                button.classList.remove('bg-emerald-500');
             }, 2500);
         }
 
-        function copyContactEmail() {
+        async function copyContactEmail() {
             const email = document.getElementById('contactEmail').innerText.trim();
-            navigator.clipboard.writeText(email);
-            const btn = document.getElementById('copyEmailBtn');
-            btn.innerHTML = '<i class="fa-solid fa-check text-emerald-500"></i><span>Copied</span>';
+            const button = document.getElementById('copyEmailBtn');
+            try {
+                await copyText(email);
+                button.querySelector('span').textContent = 'Copied';
+                announceAction('Contact email copied.');
+            } catch (error) {
+                console.error('Could not copy the contact email.', error);
+                announceAction('Copy failed. Select the email address and copy it manually.');
+            }
             setTimeout(() => {
-                btn.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copy</span>';
+                button.querySelector('span').textContent = 'Copy';
             }, 2000);
         }
 
@@ -768,10 +833,27 @@
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 300);
-            localStorage.setItem('postall_toast_dismissed', 'true');
+            setPreference('postall_toast_dismissed', 'true');
         }
 
-        if (localStorage.getItem('postall_toast_dismissed') === 'true') {
+        function getPreference(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (error) {
+                console.warn(`Could not read saved preference "${key}".`, error);
+                return null;
+            }
+        }
+
+        function setPreference(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (error) {
+                console.warn(`Could not save preference "${key}".`, error);
+            }
+        }
+
+        if (getPreference('postall_toast_dismissed') === 'true') {
             const toast = document.getElementById('saasToast');
             if (toast) toast.style.display = 'none';
         }
@@ -779,12 +861,17 @@
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             const icon = document.getElementById('themeIcon');
+            const themeButton = document.getElementById('themeToggleBtn');
             if (theme === 'light') {
                 icon.className = 'fa-solid fa-sun text-sm text-amber-600';
+                themeButton.setAttribute('aria-label', 'Switch to dark theme');
+                document.querySelector('meta[name="theme-color"]').content = '#faf8f5';
             } else {
                 icon.className = 'fa-solid fa-moon text-sm';
+                themeButton.setAttribute('aria-label', 'Switch to light theme');
+                document.querySelector('meta[name="theme-color"]').content = '#090807';
             }
-            localStorage.setItem('postall_theme', theme);
+            setPreference('postall_theme', theme);
         }
 
         function toggleTheme() {
@@ -793,21 +880,27 @@
             applyTheme(newTheme);
         }
 
-        const savedTheme = localStorage.getItem('postall_theme') || 'dark';
+        const savedTheme = getPreference('postall_theme') === 'light' ? 'light' : 'dark';
         applyTheme(savedTheme);
 
         // ==========================================
-        // Robust Chatbot Concierge Engine
+        // In-page product guide
         // ==========================================
         let isChatOpen = false;
+        let chatResponseId = 0;
+        let chatConversationId = 0;
 
-        function toggleChat() {
+        function toggleChat(shouldOpen) {
             const widget = document.getElementById('chatWidget');
             const icon = document.getElementById('launcherIcon');
-            isChatOpen = !isChatOpen;
+            const launcher = document.getElementById('chatLauncher');
+            isChatOpen = typeof shouldOpen === 'boolean' ? shouldOpen : !isChatOpen;
 
             if (isChatOpen) {
                 widget.classList.remove('hidden');
+                widget.setAttribute('aria-hidden', 'false');
+                launcher.setAttribute('aria-expanded', 'true');
+                launcher.setAttribute('aria-label', 'Close Postall product guide');
                 setTimeout(() => {
                     widget.classList.remove('scale-95', 'opacity-0');
                     widget.classList.add('scale-100', 'opacity-100');
@@ -818,34 +911,83 @@
                 widget.classList.remove('scale-100', 'opacity-100');
                 widget.classList.add('scale-95', 'opacity-0');
                 setTimeout(() => {
-                    widget.classList.add('hidden');
+                    if (!isChatOpen) {
+                        widget.classList.add('hidden');
+                        widget.setAttribute('aria-hidden', 'true');
+                    }
                 }, 250);
                 icon.className = 'fa-solid fa-comment-dots';
+                launcher.setAttribute('aria-expanded', 'false');
+                launcher.setAttribute('aria-label', 'Open Postall product guide');
+                launcher.focus();
             }
         }
+
+        function clearChat() {
+            chatConversationId++;
+            const container = document.getElementById('chatMessages');
+            container.replaceChildren();
+            appendMessage('bot', 'New conversation. Ask me about deployment, Docker requirements, privacy, the networks listed on this page, local AI, or support.');
+            document.getElementById('chatInput').focus();
+        }
+
+        function toggleMobileNav() {
+            const menu = document.getElementById('mobileNav');
+            const button = document.getElementById('mobileNavToggle');
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', String(!isExpanded));
+            button.setAttribute('aria-label', isExpanded ? 'Open navigation menu' : 'Close navigation menu');
+            document.getElementById('mobileNavIcon').className = isExpanded ? 'fa-solid fa-bars' : 'fa-solid fa-xmark';
+            menu.classList.toggle('hidden', isExpanded);
+        }
+
+        function closeMobileNav() {
+            const menu = document.getElementById('mobileNav');
+            if (!menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                document.getElementById('mobileNavToggle').setAttribute('aria-expanded', 'false');
+                document.getElementById('mobileNavToggle').setAttribute('aria-label', 'Open navigation menu');
+                document.getElementById('mobileNavIcon').className = 'fa-solid fa-bars';
+            }
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                closeMobileNav();
+                if (isChatOpen) toggleChat(false);
+            }
+        });
 
         function appendMessage(sender, text) {
             const container = document.getElementById('chatMessages');
             const msgRow = document.createElement('div');
             msgRow.className = sender === 'user' ? 'flex justify-end' : 'flex items-start space-x-2';
+            const bubble = document.createElement('div');
+            bubble.className = sender === 'user'
+                ? 'p-3 rounded-2xl rounded-tr-sm max-w-[85%] font-medium chat-bubble-content shadow-sm'
+                : 'p-3 rounded-2xl rounded-tl-sm border max-w-[85%] chat-bubble-content shadow-sm';
+            bubble.style.backgroundColor = sender === 'user' ? 'var(--chat-user-bg)' : 'var(--chat-bot-bg)';
+            bubble.style.color = sender === 'user' ? 'var(--chat-user-text)' : 'var(--text-main)';
+            if (sender !== 'user') bubble.style.borderColor = 'var(--border-subtle)';
+
+            const message = document.createElement('p');
+            message.className = 'leading-relaxed';
+            message.textContent = text;
 
             if (sender === 'user') {
-                msgRow.innerHTML = `
-                    <div class="p-3 rounded-2xl rounded-tr-sm max-w-[85%] font-medium chat-bubble-content shadow-sm" style="background-color: var(--chat-user-bg); color: var(--chat-user-text);">
-                        <p class="leading-relaxed">${text}</p>
-                    </div>
-                `;
+                bubble.appendChild(message);
             } else {
-                msgRow.innerHTML = `
-                    <div class="w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
-                        <i class="fa-solid fa-bolt"></i>
-                    </div>
-                    <div class="p-3 rounded-2xl rounded-tl-sm border max-w-[85%] chat-bubble-content shadow-sm" style="background-color: var(--chat-bot-bg); border-color: var(--border-subtle);">
-                        <div class="leading-relaxed">${text}</div>
-                    </div>
-                `;
+                const avatar = document.createElement('span');
+                avatar.className = 'w-6 h-6 rounded-md bg-amber-500/10 theme-accent flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5';
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-bolt';
+                icon.setAttribute('aria-hidden', 'true');
+                avatar.appendChild(icon);
+                msgRow.appendChild(avatar);
+                bubble.appendChild(message);
             }
 
+            msgRow.appendChild(bubble);
             container.appendChild(msgRow);
             container.scrollTop = container.scrollHeight;
         }
@@ -869,49 +1011,84 @@
         function generateBotResponse(query) {
             const q = query.toLowerCase();
             const container = document.getElementById('chatMessages');
-
-            const typingIndicator = document.createElement('div');
-            typingIndicator.id = 'typingIndicator';
-            typingIndicator.className = 'flex items-center space-x-2 text-stone-500 text-[10px] pl-8';
-            typingIndicator.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i><span>Processing query...</span>';
+            const conversationId = chatConversationId;
+            const typingIndicator = document.createElement('p');
+            typingIndicator.id = `chatTyping${++chatResponseId}`;
+            typingIndicator.className = 'text-[10px] theme-muted pl-8';
+            typingIndicator.textContent = 'Checking the product guide…';
             container.appendChild(typingIndicator);
             container.scrollTop = container.scrollHeight;
 
+            let reply = '';
+            let action = null;
+
+            if (q.includes('windows') || q.includes('powershell')) {
+                reply = 'Windows setup uses Docker Desktop and the included PowerShell script. It checks Docker, pulls the current image, and asks before replacing an existing container. The script uses a persistent Docker volume and starts the app at http://localhost:8000. Review the script before running it.';
+                action = { label: 'View PowerShell setup script', href: commands.win.scriptUrl };
+            } else if (q.includes('linux') || q.includes('mac') || q.includes('ubuntu') || q.includes('bash') || q.includes('zsh')) {
+                reply = 'Linux and macOS use the Bash setup script. Docker must be installed and running. If Docker is missing, the script offers installation (Homebrew on macOS; the official Docker install script on Linux). It then pulls the image, creates the postall_data volume, and offers to start the container. Review the script and its prompts before running it.';
+                action = { label: 'View Bash setup script', href: commands.linux.scriptUrl };
+            } else if (q.includes('install') || q.includes('deploy') || q.includes('command') || q.includes('setup')) {
+                reply = 'Deployment is an interactive Docker setup, not a one-click web signup. Choose Windows, Linux, or macOS in the deployment panel to see the command and download the script. Docker must be available; the installer checks the daemon, pulls the Postall image, and asks before starting the container. For safety, inspect the script before executing a remote installer.';
+                action = { label: 'Choose an operating system', href: '#download' };
+            } else if (q.includes('spec') || q.includes('ram') || q.includes('cpu') || q.includes('req') || q.includes('hardware') || q.includes('disk')) {
+                reply = 'Docker Engine or Docker Desktop with a running daemon is required. The included scripts set different container limits: Windows sets 1,536 MB memory and 2 CPUs; the Linux/macOS script sets a 2,500 MB memory limit and does not set a CPU limit. The repository does not specify a minimum host RAM or disk requirement, so allow extra capacity for Docker and your media.';
+                action = { label: 'Review setup scripts', href: '#download' };
+            } else if (q.includes('security') || q.includes('private') || q.includes('privacy') || (q.includes('data') && !q.includes('backup') && !q.includes('back up') && !q.includes('storage') && !q.includes('volume'))) {
+                reply = 'Self-hosting gives you control over where the application and its data run; it is not by itself a guarantee of complete privacy. Setup downloads scripts and a Docker image, this page loads third-party web assets, and connected social networks or AI services may receive data you send to them. Keep credentials secure, review the deployment scripts, and do not expose the app publicly without suitable access controls.';
+                action = { label: 'Read the data & privacy overview', href: '#security' };
+            } else if (q.includes('backup') || q.includes('back up') || q.includes('volume') || q.includes('sqlite') || q.includes('storage') || q.includes('persist')) {
+                reply = 'The setup scripts mount a Docker named volume called postall_data at /app/data so application data is separate from the container. The Windows script warns before replacing an existing container; the Linux/macOS script removes the container by name when you choose to start it. Treat the volume as important data: make and test backups before upgrades or cleanup.';
+                action = { label: 'Open the repository', href: 'https://github.com/randumduck/Postall_V4-Releases' };
+            } else if (q.includes('network') || q.includes('linkedin') || q.includes('instagram') || q.includes('youtube') || q.includes('tiktok') || q.includes('facebook') || q.includes('twitter') || q.includes('channel') || q.includes('social')) {
+                reply = 'This page lists LinkedIn, X, Instagram, YouTube, Facebook, and TikTok. Whether a specific account can publish, and which formats it supports, depends on the current app release, account type, and each platform’s API rules. Check the release notes and connect a test account before planning a production workflow.';
+                action = { label: 'View listed networks', href: '#integrations' };
+            } else if (q.includes('ollama') || q.includes('llm') || q.includes('ai') || q.includes('model') || q.includes('llama')) {
+                reply = 'The page describes an optional local-AI workflow using Ollama for copy ideas and captions. A local model needs its own installation and hardware resources; this repository does not document exact model compatibility or a complete connection walkthrough. Check the current app release before relying on a particular model or endpoint.';
+                action = { label: 'Read the local AI overview', href: '#ai' };
+            } else if (q.includes('format') || q.includes('video') || q.includes('image') || q.includes('media') || q.includes('file')) {
+                reply = 'The creative preview illustrates cross-channel campaign composition and media adaptation. It is a page mockup, not a definitive compatibility matrix. Supported file types, dimensions, and platform-specific limits can change; verify them in the current release and the destination platform’s publishing requirements.';
+                action = { label: 'Explore the creative studio', href: '#creative-studio' };
+            } else if (q.includes('compare') || q.includes('competitor') || q.includes('mixpost') || q.includes('postiz') || q.includes('buffer') || q.includes('hootsuite') || q.includes(' vs')) {
+                reply = 'I can’t make a reliable feature-by-feature comparison from this repository alone. The most useful comparison is to verify the current release’s supported platforms, publishing flows, security model, maintenance needs, and total hosting cost against your requirements.';
+                action = { label: 'Review the release repository', href: 'https://github.com/randumduck/Postall_V4-Releases' };
+            } else if (q.includes('price') || q.includes('cost') || q.includes('free') || q.includes('fee') || q.includes('license')) {
+                reply = 'This page presents Postall as self-hosted software. Self-hosting can avoid a hosted-service subscription, but it still has costs: hardware or cloud hosting, storage, backups, maintenance, and any third-party social or AI services you use. Check the repository for the current license and release terms.';
+                action = { label: 'Check the repository and license', href: 'https://github.com/randumduck/Postall_V4-Releases' };
+            } else if (q.includes('agency') || q.includes('client') || q.includes('brand') || q.includes('team')) {
+                reply = 'The page positions Postall for creators, brands, and agencies, with a campaign-composition and multi-channel publishing workflow. Before adopting it for client work, verify account separation, user roles, approval flows, and supported network permissions in the current release; this landing page does not specify those operational details.';
+                action = { label: 'Explore the creative studio', href: '#creative-studio' };
+            } else if (q.includes('feature') || q.includes('what is postall') || q.includes('what does postall do')) {
+                reply = 'Postall is presented here as a self-hosted social publishing application distributed as a Docker image. This page covers campaign composition, listed social networks, an optional local-AI workflow, and deployment scripts. Check the current release for the exact supported features and integrations.';
+                action = { label: 'Explore the page', href: '#creative-studio' };
+            } else if (q.includes('support') || q.includes('contact') || q.includes('help') || q.includes('email')) {
+                reply = 'For setup questions, feature requests, or security reports, contact the project at contact.postall@gmail.com. Include your operating system, Docker version, and relevant error output, but remove passwords, access tokens, and other secrets first.';
+                action = { label: 'Open contact details', href: '#contact' };
+            } else if (q.includes('hello') || q.includes('hi') || q.includes('hey')) {
+                reply = 'Hello! I can help with deployment, Docker requirements, data storage, privacy, the networks listed on this page, local AI, and support. What would you like to know?';
+            } else {
+                reply = 'I can answer from the information published on this page and the included setup scripts. Try asking about Windows or Linux/macOS setup, Docker requirements, backups, privacy, supported networks, local AI, or contact details. For release-specific answers, check the project repository.';
+                action = { label: 'Open the release repository', href: 'https://github.com/randumduck/Postall_V4-Releases' };
+            }
+
             setTimeout(() => {
-                const indicator = document.getElementById('typingIndicator');
-                if (indicator) indicator.remove();
-
-                let reply = "";
-
-                // Intent Routing with Compound Keyword Checks
-                if (q.includes('linux') || q.includes('mac') || q.includes('ubuntu') || q.includes('bash') || q.includes('zsh')) {
-                    reply = "To deploy Postall on <strong>Linux or macOS</strong>, run:<span class='chat-code-snippet'>curl -sSL https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.sh | bash</span>This provisions your POSIX Docker volume and executes the background service safely.";
-                } else if (q.includes('windows') || q.includes('powershell')) {
-                    reply = "To deploy Postall on <strong>Windows PowerShell</strong>, run:<span class='chat-code-snippet'>irm https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1 | iex</span>It configures named volumes (<code class='theme-accent font-mono'>postall_data</code>) to eliminate SQLite file-locking issues.";
-                } else if (q.includes('install') || q.includes('deploy') || q.includes('command') || q.includes('setup')) {
-                    reply = "Postall supports 1-click deployment across all major OS environments:<br>• <strong>Windows:</strong> PowerShell <code class='theme-accent font-mono'>irm ... | iex</code><br>• <strong>Linux / Mac:</strong> Bash <code class='theme-accent font-mono'>curl -sSL ... | bash</code><br>Select your OS tab in the Deployment section above for one-click copy!";
-                } else if (q.includes('mixpost') || q.includes('postiz') || q.includes('buffer') || q.includes('hootsuite') || q.includes('competitor') || q.includes('compare') || q.includes('vs')) {
-                    reply = "<strong>How Postall compares to Postiz & Mixpost:</strong><br>• <strong>Zero Complex Stacks:</strong> Operates as a single lightweight container (under 1.5GB RAM) without requiring external PostgreSQL, Redis, or Temporal clusters.<br>• <strong>Native Local LLMs:</strong> Interconnects directly with private Ollama daemons for air-gapped AI post generation.<br>• <strong>Zero-Touch Silent Updates:</strong> Auto-patches background dependencies via GitHub delta hashes.";
-                } else if (q.includes('price') || q.includes('cost') || q.includes('free') || q.includes('fee') || q.includes('license')) {
-                    reply = "<strong>100% Free & Self-Hosted:</strong> Postall Core has zero per-seat licensing fees, zero monthly platform subscriptions, and no limits on connected accounts. You only pay for your own hosting infrastructure.";
-                } else if (q.includes('format') || q.includes('video') || q.includes('image') || q.includes('media') || q.includes('file')) {
-                    reply = "<strong>Supported Media & Video Formats:</strong><br>• <strong>Videos:</strong> MP4, WebM, MOV (automatic 9:16 vertical encoding for Reels & Shorts)<br>• <strong>Images:</strong> PNG, JPG, WebP, GIF<br>• <strong>Documents:</strong> Multi-page PDF carousels for LinkedIn<br>All media is stored locally in your private Docker volume.";
-                } else if (q.includes('ollama') || q.includes('llm') || q.includes('ai') || q.includes('model') || q.includes('llama')) {
-                    reply = "<strong>Local AI Architecture:</strong><br>Postall interfaces with your local Ollama daemon at <code class='theme-accent font-mono'>http://localhost:11434</code> (or custom IP). It natively supports Llama 3, Mistral, Gemma, and custom fine-tunes to generate viral hooks and captions without sending prompts to cloud APIs.";
-                } else if (q.includes('agency') || q.includes('client') || q.includes('brand') || q.includes('team')) {
-                    reply = "<strong>Agency Workflow Benefits:</strong><br>• Segregated campaign queues for unlimited clients.<br>• No seat fees for copywriters or video editors.<br>• Unreleased embargoed assets remain strictly inside your private network.";
-                } else if (q.includes('volume') || q.includes('sqlite') || q.includes('lock') || q.includes('docker')) {
-                    reply = "Postall avoids Windows filesystem locking by mounting Docker named volumes (<code class='theme-accent font-mono'>postall_data</code>) rather than host folder bind-mounts. This guarantees SQLite WAL journal stability without disk write collisions.";
-                } else if (q.includes('spec') || q.includes('ram') || q.includes('cpu') || q.includes('req') || q.includes('hardware')) {
-                    reply = "<strong>Minimum System Specifications:</strong><br>• Docker Engine / Desktop (Linux Containers)<br>• 1536 MB RAM limit enforced<br>• 2 Virtual CPUs<br>• 10 GB disk space for media caching.";
-                } else if (q.includes('saas') || q.includes('cloud') || q.includes('waitlist')) {
-                    reply = "The managed <strong>Postall Cloud SaaS</strong> edition is currently in active staging for users wanting zero-server maintenance. Send an inquiry to <code class='theme-accent font-mono'>contact.postall@gmail.com</code> for priority beta access!";
-                } else {
-                    reply = "I specialize in Postall self-hosting, agency media workflows, and local AI setup. Try asking: <em>'How to install on Linux'</em>, <em>'Postall vs Mixpost'</em>, <em>'Supported video formats'</em>, or <em>'How does Ollama connect?'</em>";
-                }
-
+                if (conversationId !== chatConversationId) return;
+                typingIndicator.remove();
                 appendMessage('bot', reply);
-            }, 350);
+                if (action) {
+                    const lastBubble = container.lastElementChild.querySelector('.chat-bubble-content');
+                    const link = document.createElement('a');
+                    link.href = action.href;
+                    link.className = 'inline-flex items-center gap-1 mt-2 theme-accent font-semibold hover:underline';
+                    link.textContent = action.label;
+                    if (action.href.startsWith('https://')) {
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                    }
+                    lastBubble.appendChild(link);
+                    container.scrollTop = container.scrollHeight;
+                }
+            }, 250);
         }
     </script>
 </body>
