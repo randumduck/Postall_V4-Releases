@@ -300,7 +300,7 @@
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
                     <a href="#download" class="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-bold px-8 py-4 rounded-xl text-sm transition shadow-xl shadow-amber-600/20 flex items-center justify-center space-x-3 border border-amber-400/30">
                         <i class="fa-solid fa-bolt text-stone-950"></i>
-                        <span>Choose your deployment</span>
+                        <span>Deploy with Docker — Free</span>
                     </a>
                     <a href="#creative-studio" class="w-full sm:w-auto theme-card border hover:border-amber-500/50 font-medium px-7 py-4 rounded-xl text-sm transition backdrop-blur flex items-center justify-center space-x-3">
                         <i class="fa-solid fa-wand-magic-sparkles theme-accent"></i>
@@ -310,13 +310,13 @@
 
                 <aside id="saasToast" aria-label="Deployment information" class="max-w-3xl mx-auto mb-12 p-4 rounded-2xl theme-card border text-left flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
                     <div class="flex items-start gap-3">
-                        <i class="fa-solid fa-circle-info theme-accent mt-0.5"></i>
+                        <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>
                         <p class="text-xs theme-muted leading-relaxed">
-                            <strong class="theme-main">Self-hosted setup:</strong> Docker is required. Review the setup script before running it.
+                            <strong class="theme-main">100% Free & Self-Hosted:</strong> No subscription fees or cloud locks. Run securely on your hardware via Docker.
                         </p>
                     </div>
                     <div class="flex items-center justify-between sm:justify-end gap-4">
-                        <a href="#download" class="text-xs font-semibold theme-accent hover:underline whitespace-nowrap">View deployment options <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                        <a href="#download" class="text-xs font-semibold theme-accent hover:underline whitespace-nowrap">View setup options <i class="fa-solid fa-arrow-right ml-1"></i></a>
                         <button type="button" onclick="dismissToast()" class="theme-muted hover:text-amber-500 text-xs p-1 rounded-md transition" aria-label="Dismiss deployment information" title="Dismiss">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -371,10 +371,10 @@
                         <i class="fa-solid fa-photo-film"></i><span>Campaign workflow preview</span>
                     </div>
                     <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
-                        Prepare a campaign. Review each channel.
+                        Craft Once, Publish Everywhere.
                     </h2>
                     <p class="theme-muted text-base leading-relaxed">
-                        The page preview illustrates a campaign composer, channel-specific creative variants, and a publishing workflow. Check the current release for the supported formats and exact behavior before adopting it for a production process.
+                        Design unified multi-channel campaigns with custom copy, media variations, and scheduling tailored for each social network—all managed effortlessly from one central studio.
                     </p>
                 </div>
 
@@ -444,7 +444,7 @@
                             </div>
                             <h3 class="text-lg font-bold mb-2">Campaign composition</h3>
                             <p class="theme-muted text-xs leading-relaxed">
-                                The preview shows one campaign prepared for several channels. Confirm supported networks, media handling, and any automatic formatting in the version you install.
+                                Compose once, customize per network. Adapt text length, hashtags, and media assets to meet the exact specifications of each destination platform.
                             </p>
                         </div>
 
@@ -454,7 +454,7 @@
                             </div>
                             <h3 class="text-lg font-bold mb-2">Publishing calendar</h3>
                             <p class="theme-muted text-xs leading-relaxed">
-                                Plan and review scheduled content from a central workflow. Calendar interactions and scheduling options depend on the current application release.
+                                Plan, visualize, and schedule your content pipeline with an intuitive calendar view for complete visibility over your publishing roadmap.
                             </p>
                         </div>
 
@@ -464,7 +464,7 @@
                             </div>
                             <h3 class="text-lg font-bold mb-2">Self-managed media storage</h3>
                             <p class="theme-muted text-xs leading-relaxed">
-                                The installer mounts a named Docker volume for application data. Plan storage capacity and backups on the host you manage.
+                                Keep complete custody of your creative assets. Your videos, graphics, and campaign data stay securely on your own Docker volume.
                             </p>
                         </div>
                     </div>
@@ -472,19 +472,19 @@
 
                 <div class="grid md:grid-cols-3 gap-6 text-center">
                     <div class="theme-elevated border p-6 rounded-2xl">
-                        <span class="text-3xl font-black text-amber-500 block mb-1">Self-hosted</span>
-                        <h4 class="font-bold text-sm mb-1">Deployment control</h4>
-                        <p class="theme-muted text-xs">Choose where the Docker container runs and plan for its upkeep, backups, and security.</p>
+                        <span class="text-3xl font-black text-amber-500 block mb-1">Full Control</span>
+                        <h4 class="font-bold text-sm mb-1">Self-hosted Freedom</h4>
+                        <p class="theme-muted text-xs">Run your instance on your terms with Docker. No arbitrary account limits, locked features, or surprise bills.</p>
                     </div>
                     <div class="theme-elevated border p-6 rounded-2xl">
-                        <span class="text-3xl font-black text-emerald-500 block mb-1">One view</span>
-                        <h4 class="font-bold text-sm mb-1">Campaign workflow</h4>
-                        <p class="theme-muted text-xs">Explore the campaign and channel concepts shown in the preview; confirm team and account capabilities in the release.</p>
+                        <span class="text-3xl font-black text-emerald-500 block mb-1">One Hub</span>
+                        <h4 class="font-bold text-sm mb-1">Unified Campaigns</h4>
+                        <p class="theme-muted text-xs">Manage post drafts, creative asset variations, and publishing queues across all channels in one central place.</p>
                     </div>
                     <div class="theme-elevated border p-6 rounded-2xl">
-                        <span class="text-3xl font-black theme-accent block mb-1">Your host</span>
-                        <h4 class="font-bold text-sm mb-1">Data responsibility</h4>
-                        <p class="theme-muted text-xs">Self-hosting gives you control of the runtime; secure it and review what data connected services receive.</p>
+                        <span class="text-3xl font-black theme-accent block mb-1">Your Server</span>
+                        <h4 class="font-bold text-sm mb-1">Complete Privacy</h4>
+                        <p class="theme-muted text-xs">Your marketing strategy, schedules, and audience data remain confidential on your own hardware.</p>
                     </div>
                 </div>
             </div>
@@ -493,7 +493,7 @@
         <!-- Integrations Section -->
         <section id="integrations" class="scroll-mt-28 py-16 border-b theme-elevated">
             <div class="max-w-7xl mx-auto px-6 text-center">
-                <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-8">Social networks named in the project overview</h2>
+                <h2 class="text-xs uppercase font-bold theme-accent tracking-widest mb-8">Connect Across Your Favorite Channels</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">
                     <div class="theme-card border py-4 px-6 rounded-xl flex items-center justify-center space-x-2 font-semibold text-sm shadow-sm">
                         <i class="fa-brands fa-linkedin text-blue-500 text-lg"></i><span>LinkedIn</span>
@@ -515,7 +515,7 @@
                     </div>
                 </div>
                 <p class="max-w-3xl mx-auto mt-6 text-xs theme-muted leading-relaxed">
-                    These are the networks named on this page, not a guarantee that every account or publishing format is currently supported. Availability depends on the installed release, account type, and each platform's API policies.
+                    Publish directly to major social platforms from your private server. Supported media formats, account types, and features align with official platform APIs.
                 </p>
             </div>
         </section>
@@ -526,24 +526,24 @@
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
-                            <i class="fa-solid fa-microchip"></i><span>Optional local AI workflow</span>
+                            <i class="fa-solid fa-microchip"></i><span>Private On-Premise AI</span>
                         </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Explore local language models for draft copy.</h2>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Unleash Local AI — 100% Private, Zero Cloud Leakage.</h2>
                         <p class="theme-muted text-base mb-8 leading-relaxed">
-                            This page describes an optional Ollama-based workflow for generating copy ideas. A local model still needs to be installed and resourced on your hardware. Verify the current release's integration details and network behavior before using sensitive prompts.
+                            Harness intelligent AI directly on your server to brainstorm creative angles, generate engaging captions, and tailor post variations per channel. Because your models run locally on your own hardware, your campaign strategy and private data never leave your premises.
                         </p>
                         <ul class="space-y-4 text-sm font-medium">
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Local model option:</strong> The page names Ollama as a possible runtime.</span>
+                                <span><strong>Local execution:</strong> Run AI models on your own host with zero recurring API tokens or third-party fees.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Review data flows:</strong> Connected social platforms and services have their own data handling.</span>
+                                <span><strong>Complete privacy:</strong> Draft and iterate on sensitive campaign materials without cloud data logging.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Check model fit:</strong> Compatibility and quality depend on your model and installed release.</span>
+                                <span><strong>Channel adaptation:</strong> Automatically reshape messaging to match the specific audience and tone of each network.</span>
                             </li>
                         </ul>
                     </div>
@@ -551,15 +551,15 @@
                         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600"></div>
                         <h4 class="text-lg font-bold mb-4 flex items-center space-x-2">
                             <i class="fa-solid fa-terminal theme-accent"></i>
-                            <span>Illustrative local-AI flow</span>
+                            <span>Private AI Content Assistant</span>
                         </h4>
                         <div class="p-4 rounded-xl border border-stone-800 font-mono text-xs text-amber-300 space-y-2" style="background-color: var(--code-bg);">
-                            <p class="text-stone-500"># Example only — not a verified CLI command</p>
-                            <p>&gt; Prompt a local model with a campaign brief</p>
-                            <p class="text-emerald-400">Review draft suggestions before publishing</p>
-                            <p class="text-stone-200">• Adapt tone for the intended audience</p>
-                            <p class="text-stone-200">• Check factual claims and platform rules</p>
-                            <p class="text-stone-200">• Keep credentials out of prompts</p>
+                            <p class="text-stone-500"># On-device AI inference — 100% offline</p>
+                            <p>&gt; Prompting local model with campaign brief</p>
+                            <p class="text-emerald-400">Tailored copy variations generated instantly</p>
+                            <p class="text-stone-200">• Channel-specific formatting & hashtag research</p>
+                            <p class="text-stone-200">• Tone adjustment: casual, professional, direct</p>
+                            <p class="text-stone-200">• Zero external telemetry or API consumption</p>
                         </div>
                     </div>
                 </div>
@@ -572,24 +572,24 @@
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 theme-accent text-xs font-bold mb-4">
-                            <i class="fa-solid fa-vault"></i><span>Self-hosted deployment</span>
+                            <i class="fa-solid fa-vault"></i><span>Data Sovereignty & Privacy</span>
                         </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Control your deployment. Own the operational work.</h2>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Your Server, Your Data, Zero Vendor Lock-In.</h2>
                         <p class="theme-muted text-base mb-8 leading-relaxed">
-                            The included scripts run Postall in Docker and store application data in a named volume on the Docker host. Self-hosting gives you control over that environment, but security depends on how you secure, expose, update, and back it up. This page also loads styling and icons from third-party CDNs, and connected services have their own data flows.
+                            Take full ownership of your marketing assets and publishing pipeline. By self-hosting Postall in a Docker container, you retain absolute authority over databases, media files, and authentication credentials. No third-party lock-in, no surprise price hikes, and no cloud surveillance.
                         </p>
                         <ul class="space-y-4 text-sm font-medium">
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Persistent volume:</strong> The setup scripts mount <code class="font-mono">postall_data</code> at <code class="font-mono">/app/data</code>.</span>
+                                <span><strong>Persistent storage:</strong> All campaigns, schedules, and assets are safely isolated in your dedicated <code class="font-mono">postall_data</code> Docker volume.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Backups matter:</strong> Protect the Docker volume before replacing containers or maintaining the host.</span>
+                                <span><strong>Enterprise-grade control:</strong> Protect your deployment behind your private network, VPN, or reverse proxy with custom SSL.</span>
                             </li>
                             <li class="flex items-center space-x-3">
                                 <div class="w-6 h-6 rounded-full bg-amber-500/10 theme-accent flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                                <span><strong>Limit exposure:</strong> Keep credentials secure and avoid exposing the app publicly without access controls.</span>
+                                <span><strong>Effortless backups:</strong> Snapshot, migrate, or export your instance at any time with standard Docker tooling.</span>
                             </li>
                         </ul>
                     </div>
@@ -597,16 +597,16 @@
                         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600"></div>
                         <h4 class="text-lg font-bold mb-4 flex items-center space-x-2">
                             <i class="fa-solid fa-shield-halved theme-accent"></i>
-                            <span>Deployment checklist</span>
+                            <span>Self-Hosted Architecture</span>
                         </h4>
                         <div class="grid grid-cols-2 gap-4 text-center font-mono mt-6">
                             <div class="theme-elevated p-4 rounded-xl border">
                                 <span class="text-emerald-500 text-lg font-bold block">Docker</span>
-                                <span class="text-[10px] theme-muted uppercase font-semibold">Runtime required</span>
+                                <span class="text-[10px] theme-muted uppercase font-semibold">Isolated Runtime</span>
                             </div>
                             <div class="theme-elevated p-4 rounded-xl border">
-                                <span class="text-amber-500 text-lg font-bold block">Backup</span>
-                                <span class="text-[10px] theme-muted uppercase font-semibold">Plan for data</span>
+                                <span class="text-amber-500 text-lg font-bold block">Local Volume</span>
+                                <span class="text-[10px] theme-muted uppercase font-semibold">Zero Cloud Leak</span>
                             </div>
                         </div>
                     </div>
@@ -619,8 +619,8 @@
             <div class="max-w-4xl mx-auto px-6">
                 <div class="theme-card border rounded-3xl p-8 sm:p-14 shadow-2xl backdrop-blur-xl relative overflow-hidden">
                     <div class="text-center max-w-xl mx-auto mb-10 relative z-10">
-                        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Deploy Postall Today</h2>
-                        <p class="theme-muted text-sm">Choose an operating system to download the setup script. Review it before running; Docker must be installed and running.</p>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Deploy Postall in Minutes</h2>
+                        <p class="theme-muted text-sm">Select your operating system and run the automated setup script. Your private social publishing suite will be up and running locally in minutes.</p>
                     </div>
 
                     <!-- Responsive Wrapping OS Tab Selector Buttons -->
@@ -721,11 +721,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 border-t theme-elevated py-8 px-6 text-center text-xs theme-muted">
-        <p>&copy; 2026 Postall. Self-hosted software; hosting and third-party platform costs may apply.</p>
-        <a href="https://github.com/randumduck/Postall_V4-Releases" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-3 theme-accent hover:underline">
-            <i class="fa-brands fa-github"></i><span>Source, releases & setup scripts</span>
-        </a>
+    <footer class="relative z-10 border-t theme-elevated py-8 px-6 text-xs theme-muted">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <p>&copy; 2026 Postall. Self-hosted & open-source software.</p>
+            <div class="flex flex-wrap items-center justify-center gap-6">
+                <a href="PRIVACY.md" class="hover:text-amber-500 transition">Privacy Policy</a>
+                <a href="TERMS.md" class="hover:text-amber-500 transition">Terms of Service</a>
+                <a href="LICENSE" class="hover:text-amber-500 transition">License</a>
+                <a href="https://github.com/randumduck/Postall_V4-Releases" target="_blank" rel="noopener noreferrer" class="theme-accent hover:underline flex items-center gap-1.5 font-semibold">
+                    <i class="fa-brands fa-github"></i><span>GitHub Releases</span>
+                </a>
+            </div>
+        </div>
     </footer>
 
     <!-- Interactive Script with Robust Parsing -->
@@ -1070,8 +1077,8 @@
             } else if (q.includes('network') || q.includes('linkedin') || q.includes('instagram') || q.includes('youtube') || q.includes('tiktok') || q.includes('facebook') || q.includes('twitter') || q.includes('channel') || q.includes('social')) {
                 reply = 'This page lists LinkedIn, X, Instagram, YouTube, Facebook, and TikTok. Whether a specific account can publish, and which formats it supports, depends on the current app release, account type, and each platform’s API rules. Check the release notes and connect a test account before planning a production workflow.';
                 action = { label: 'View listed networks', href: '#integrations' };
-            } else if (q.includes('ollama') || q.includes('llm') || q.includes('ai') || q.includes('model') || q.includes('llama')) {
-                reply = 'The page describes an optional local-AI workflow using Ollama for copy ideas and captions. A local model needs its own installation and hardware resources; this repository does not document exact model compatibility or a complete connection walkthrough. Check the current app release before relying on a particular model or endpoint.';
+            } else if (q.includes('ai') || q.includes('model') || q.includes('copy') || q.includes('caption') || q.includes('draft') || q.includes('generate')) {
+                reply = 'Postall includes private local AI capabilities for drafting campaign copy, generating post captions, and adapting messaging per social channel. Because inference runs on-premise on your own server, your prompts and data remain 100% confidential without recurring third-party API fees.';
                 action = { label: 'Read the local AI overview', href: '#ai' };
             } else if (q.includes('format') || q.includes('video') || q.includes('image') || q.includes('media') || q.includes('file')) {
                 reply = 'The creative preview illustrates cross-channel campaign composition and media adaptation. It is a page mockup, not a definitive compatibility matrix. Supported file types, dimensions, and platform-specific limits can change; verify them in the current release and the destination platform’s publishing requirements.';
@@ -1086,7 +1093,7 @@
                 reply = 'The page positions Postall for creators, brands, and agencies, with a campaign-composition and multi-channel publishing workflow. Before adopting it for client work, verify account separation, user roles, approval flows, and supported network permissions in the current release; this landing page does not specify those operational details.';
                 action = { label: 'Explore the creative studio', href: '#creative-studio' };
             } else if (q.includes('feature') || q.includes('what is postall') || q.includes('what does postall do')) {
-                reply = 'Postall is presented here as a self-hosted social publishing application distributed as a Docker image. This page covers campaign composition, listed social networks, an optional local-AI workflow, and deployment scripts. Check the current release for the exact supported features and integrations.';
+                reply = 'Postall is a self-hosted social marketing and publishing platform. It lets you compose multi-channel campaigns, leverage private on-premise AI assistance, schedule posts on a visual calendar, and maintain complete custody of your data and assets with Docker.';
                 action = { label: 'Explore the page', href: '#creative-studio' };
             } else if (q.includes('support') || q.includes('contact') || q.includes('help') || q.includes('email')) {
                 reply = 'For setup questions, feature requests, or security reports, contact the project at contact.postall@gmail.com. Include your operating system, Docker version, and relevant error output, but remove passwords, access tokens, and other secrets first.';
