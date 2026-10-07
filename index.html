@@ -650,7 +650,7 @@
                     <p id="actionStatus" role="status" aria-live="polite" class="sr-only"></p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-xs theme-muted relative z-10 font-medium">
-                        <a id="downloadLink" href="https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1" download class="hover:text-amber-600 dark:hover:text-amber-400 transition flex items-center space-x-2">
+                        <a id="downloadLink" href="https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/setup_postall.ps1" download="setup_postall.ps1" onclick="downloadScript(event)" class="hover:text-amber-600 dark:hover:text-amber-400 transition flex items-center space-x-2">
                             <i class="fa-solid fa-file-arrow-down theme-accent"></i>
                             <span id="downloadLinkText">Download PowerShell Script</span>
                         </a>
@@ -791,6 +791,33 @@
 
         function announceAction(message) {
             document.getElementById('actionStatus').textContent = message;
+        }
+
+        async function downloadScript(event, os = currentOs) {
+            event.preventDefault();
+            const { scriptUrl, linkText } = commands[os];
+            const filename = scriptUrl.split('/').pop();
+            announceAction(`Downloading ${filename}…`);
+
+            try {
+                const response = await fetch(scriptUrl);
+                if (!response.ok) {
+                    throw new Error(`Download failed with HTTP ${response.status}.`);
+                }
+
+                const blobUrl = URL.createObjectURL(await response.blob());
+                const download = document.createElement('a');
+                download.href = blobUrl;
+                download.download = filename;
+                document.body.appendChild(download);
+                download.click();
+                download.remove();
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+                announceAction(`${linkText} downloaded. Review the script before running it.`);
+            } catch (error) {
+                console.error(`Could not download ${filename}.`, error);
+                announceAction(`Download failed. Use Repository Source to download ${filename} manually.`);
+            }
         }
 
         async function copyCommand() {
@@ -1024,10 +1051,10 @@
 
             if (q.includes('windows') || q.includes('powershell')) {
                 reply = 'Windows setup uses Docker Desktop and the included PowerShell script. It checks Docker, pulls the current image, and asks before replacing an existing container. The script uses a persistent Docker volume and starts the app at http://localhost:8000. Review the script before running it.';
-                action = { label: 'View PowerShell setup script', href: commands.win.scriptUrl };
+                action = { label: 'Download PowerShell setup script', href: '#download', downloadOs: 'win' };
             } else if (q.includes('linux') || q.includes('mac') || q.includes('ubuntu') || q.includes('bash') || q.includes('zsh')) {
                 reply = 'Linux and macOS use the Bash setup script. Docker must be installed and running. If Docker is missing, the script offers installation (Homebrew on macOS; the official Docker install script on Linux). It then pulls the image, creates the postall_data volume, and offers to start the container. Review the script and its prompts before running it.';
-                action = { label: 'View Bash setup script', href: commands.linux.scriptUrl };
+                action = { label: 'Download Bash setup script', href: '#download', downloadOs: q.includes('mac') || q.includes('zsh') ? 'mac' : 'linux' };
             } else if (q.includes('install') || q.includes('deploy') || q.includes('command') || q.includes('setup')) {
                 reply = 'Deployment is an interactive Docker setup, not a one-click web signup. Choose Windows, Linux, or macOS in the deployment panel to see the command and download the script. Docker must be available; the installer checks the daemon, pulls the Postall image, and asks before starting the container. For safety, inspect the script before executing a remote installer.';
                 action = { label: 'Choose an operating system', href: '#download' };
@@ -1081,7 +1108,14 @@
                     link.href = action.href;
                     link.className = 'inline-flex items-center gap-1 mt-2 theme-accent font-semibold hover:underline';
                     link.textContent = action.label;
-                    if (action.href.startsWith('https://')) {
+                    if (action.downloadOs) {
+                        link.href = action.href;
+                        link.addEventListener('click', event => {
+                            event.preventDefault();
+                            switchTab(action.downloadOs);
+                            downloadScript(event, action.downloadOs);
+                        });
+                    } else if (action.href.startsWith('https://')) {
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
                     }
