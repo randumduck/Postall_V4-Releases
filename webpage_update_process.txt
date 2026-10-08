@@ -15,7 +15,3 @@ git add index.html
 git commit -m "fix(ui): download options"
 git push origin main
 
-
-
-contact.postall@gmail.com
-zasderty@QW#$!S23!
