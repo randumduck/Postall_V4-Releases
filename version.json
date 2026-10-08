@@ -1,1 +1,11 @@
-﻿{"patch_url":"https://raw.githubusercontent.com/randumduck/Postall_V4-Releases/main/patch_v4.0.4.zip","changelog":["Production release v4.0.4","Promoted as latest stable build"],"patch_sha256":"2ee0ee9f975f6d67b56405a9bba816588e2121684eedc5c50225700daa885228","latest_version":"4.0.4"}
+﻿{
+    "update_instructions":  "docker compose pull \u0026\u0026 docker compose up -d",
+    "changelog":  [
+                      "AOT Cython Native Extension Build: Military-grade source protection",
+                      "Anti-Boxy CairoSVG Engine: Native gradients, drop-shadows, and radius controls",
+                      "Trending Industry Radar: Real-time RSS threat and tech ideation feeds",
+                      "SaaS V6 Interface: 3-tier navigation with Trust \u0026 Compliance Center"
+                  ],
+    "release_date":  "2026-10-09",
+    "latest_version":  "4.1.0"
+}
