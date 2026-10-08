@@ -1,0 +1,21 @@
+cd C:\Users\nikkumar\Downloads\Projects\Postall_V4-Releases
+
+# 1. Stage your changes
+git add index.html
+
+# 2. Commit the update
+git commit -m "update: refresh landing page content"
+
+# 3. Push to trigger the auto-deployment
+git push origin main
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cd C:\Users\nikkumar\Downloads\Projects\Postall_V4-Releases
+git add index.html
+git commit -m "fix(ui): download options"
+git push origin main
+
+
+
+contact.postall@gmail.com
+zasderty@QW#$!S23!
