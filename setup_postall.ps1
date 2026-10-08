@@ -3,10 +3,14 @@
 $ImageName = "randumduck69/postall:v4-latest"
 $ContainerName = "postall_app"
 $VolumeName = "postall_data"
-$MemoryLimit = "1536m"
+$MemoryLimit = "2560m"
 
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host "   Postall_V4: Enterprise Content Platform" -ForegroundColor Cyan
+Write-Host "   Automated Docker Installation and Boot" -ForegroundColor Cyan
+Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "Starting Postall_V4 pre-flight checks..." -ForegroundColor Cyan
-Write-Host "The container will be limited to $MemoryLimit of memory and 2 CPUs."
+Write-Host "The container will be allocated $MemoryLimit of memory and 2 CPUs for high-performance offline AI." -ForegroundColor Gray
 
 $dockerCommand = Get-Command docker -ErrorAction SilentlyContinue
 if (-not $dockerCommand) {
@@ -37,7 +41,7 @@ Write-Host "Docker CLI found." -ForegroundColor Green
 $null = docker info 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Docker daemon is not running or the current user cannot access it." -ForegroundColor Red
-    Write-Host "Start Docker Desktop, then rerun this script."
+    Write-Host "Start Docker Desktop, wait for the engine to initialize, then rerun this script."
     exit 1
 }
 
@@ -70,15 +74,24 @@ if ($existingContainer) {
     }
 }
 
-# Create named Docker volume to ensure full POSIX SQLite write compatibility
+# Create named Docker volume to ensure full POSIX SQLite write compatibility and persistent local models
 docker volume create $VolumeName | Out-Null
 
 Write-Host "Launching Postall_V4 with volume '$VolumeName'..." -ForegroundColor Cyan
+
+# Check for optional local .env configuration
+$extraArgs = @()
+if (Test-Path ".env") {
+    Write-Host "Mounting host .env configuration into container..." -ForegroundColor Gray
+    $extraArgs += "-v"
+    $extraArgs += "${PWD}/.env:/app/.env"
+}
 
 docker run -d `
     --name $ContainerName `
     --publish 8000:8000 `
     --volume "${VolumeName}:/app/data" `
+    @extraArgs `
     --memory=$MemoryLimit `
     --memory-swap=$MemoryLimit `
     --cpus=2.0 `
@@ -90,7 +103,7 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-Write-Host "Container '$ContainerName' is running with a$MemoryLimit memory limit." -ForegroundColor Green
+Write-Host "Container '$ContainerName' is running with a $MemoryLimit memory limit." -ForegroundColor Green
 $url = "http://localhost:8000"
 Write-Host "Opening $url..." -ForegroundColor Cyan
 try {
