@@ -3,7 +3,7 @@
 $ImageName = "randumduck69/postall:v4-latest"
 $ContainerName = "postall_app"
 $VolumeName = "postall_data"
-$MemoryLimit = "2560m"
+$MemoryLimit = "4g"
 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "   Postall_V4: Enterprise Content Platform" -ForegroundColor Cyan
@@ -92,9 +92,11 @@ docker run -d `
     --publish 8000:8000 `
     --volume "${VolumeName}:/app/data" `
     @extraArgs `
-    --memory=$MemoryLimit `
-    --memory-swap=$MemoryLimit `
-    --cpus=2.0 `
+    --memory="4g" `
+    --memory-swap="4g" `
+    --cpus="4.0" `
+    --log-opt max-size=50m `
+    --log-opt max-file=3 `
     --restart unless-stopped `
     $ImageName | Out-Null
 

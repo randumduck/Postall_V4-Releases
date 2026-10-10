@@ -44,7 +44,7 @@ docker pull "$IMAGE_NAME"
 
 read -p "✅ Image pulled successfully. Do you want to run Postall_V4 now? (y/n) " run_app
 if [[ "$run_app" =~ ^[Yy]$ ]]; then
-    echo "⚙️ Starting Postall_V4 with a strict 2.5 GB memory limit..."
+    echo "⚙️ Starting Postall_V4 with a strict 4 GB memory limit..."
     docker volume create postall_data >/dev/null 2>&1 || true
     docker rm -f postall_app >/dev/null 2>&1 || true
 
@@ -52,7 +52,11 @@ if [[ "$run_app" =~ ^[Yy]$ ]]; then
         --name postall_app \
         -p 8000:8000 \
         -v postall_data:/app/data \
-        -m 2500M \
+        --memory="4g" \
+        --memory-swap="4g" \
+        --cpus="4.0" \
+        --log-opt max-size=50m \
+        --log-opt max-file=3 \
         --restart unless-stopped \
         "$IMAGE_NAME"
     

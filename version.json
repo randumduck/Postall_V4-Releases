@@ -1,11 +1,14 @@
-﻿{
-    "update_instructions":  "docker compose pull \u0026\u0026 docker compose up -d",
-    "changelog":  [
-                      "AOT Cython Native Extension Build: Military-grade source protection",
-                      "Anti-Boxy CairoSVG Engine: Native gradients, drop-shadows, and radius controls",
-                      "Trending Industry Radar: Real-time RSS threat and tech ideation feeds",
-                      "SaaS V6 Interface: 3-tier navigation with Trust \u0026 Compliance Center"
-                  ],
-    "release_date":  "2026-10-09",
-    "latest_version":  "4.1.0"
+{
+    "update_instructions": "docker compose pull && docker compose up -d",
+    "changelog": [
+        "AOT Cython Native Extension Build: Military-grade source protection",
+        "Anti-Boxy CairoSVG Engine: Native gradients, drop-shadows, and radius controls",
+        "Trending Industry Radar: Real-time RSS threat and tech ideation feeds",
+        "SaaS V6 Interface: 3-tier navigation with Trust & Compliance Center",
+        "SaaS UI/UX Sidebar Overhaul",
+        "Enterprise Trust & Compliance Center",
+        "Universal Customer Deployment Scripts"
+    ],
+    "release_date": "2026-10-09",
+    "latest_version": "4.2.0"
 }
