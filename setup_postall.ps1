@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 
 $ImageName = "randumduck69/postall:v4-latest"
-$ContainerName = "postall_app"
+$ContainerName = "postall_engine"
 $VolumeName = "postall_data"
 $MemoryLimit = "4g"
 
@@ -10,7 +10,7 @@ Write-Host "   Postall_V4: Enterprise Content Platform" -ForegroundColor Cyan
 Write-Host "   Automated Docker Installation and Boot" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "Starting Postall_V4 pre-flight checks..." -ForegroundColor Cyan
-Write-Host "The container will be allocated $MemoryLimit of memory and 2 CPUs for high-performance offline AI." -ForegroundColor Gray
+Write-Host "The container will be allocated $MemoryLimit of memory for high-performance offline AI." -ForegroundColor Gray
 
 $dockerCommand = Get-Command docker -ErrorAction SilentlyContinue
 if (-not $dockerCommand) {
@@ -94,18 +94,17 @@ docker run -d `
     @extraArgs `
     --memory="4g" `
     --memory-swap="4g" `
-    --cpus="4.0" `
     --log-opt max-size=50m `
     --log-opt max-file=3 `
     --restart unless-stopped `
-    $ImageName | Out-Null
+    $ImageName
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Container start failed (exit code $LASTEXITCODE)." -ForegroundColor Red
     exit $LASTEXITCODE
 }
 
-Write-Host "Container '$ContainerName' is running with a $MemoryLimit memory limit." -ForegroundColor Green
+Write-Host "Container '$ContainerName' is running with a$MemoryLimit memory limit." -ForegroundColor Green
 $url = "http://localhost:8000"
 Write-Host "Opening $url..." -ForegroundColor Cyan
 try {

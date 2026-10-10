@@ -39,28 +39,33 @@ if ! docker info &> /dev/null; then
 fi
 
 IMAGE_NAME="randumduck69/postall:v4-latest"
+CONTAINER_NAME="postall_engine"
+
 echo "📥 Pulling the latest Postall_V4 image..."
 docker pull "$IMAGE_NAME"
 
 read -p "✅ Image pulled successfully. Do you want to run Postall_V4 now? (y/n) " run_app
 if [[ "$run_app" =~ ^[Yy]$ ]]; then
-    echo "⚙️ Starting Postall_V4 with a strict 4 GB memory limit..."
+    echo "⚙️ Starting Postall_V4 with a strict 4 GB memory limit for high-performance offline AI..."
     docker volume create postall_data >/dev/null 2>&1 || true
-    docker rm -f postall_app >/dev/null 2>&1 || true
+    
+    # Remove existing container if it exists
+    if docker ps -a -q -f name="^${CONTAINER_NAME}$" > /dev/null; then
+        docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
+    fi
 
     docker run -d \
-        --name postall_app \
+        --name "$CONTAINER_NAME" \
         -p 8000:8000 \
         -v postall_data:/app/data \
         --memory="4g" \
         --memory-swap="4g" \
-        --cpus="4.0" \
         --log-opt max-size=50m \
         --log-opt max-file=3 \
         --restart unless-stopped \
         "$IMAGE_NAME"
     
-    echo "✅ Container 'postall_app' is securely running in the background."
+    echo "✅ Container '$CONTAINER_NAME' is securely running in the background."
     URL="http://localhost:8000"
     echo "🌐 Opening $URL in your default web browser..."
     
@@ -69,7 +74,7 @@ if [[ "$run_app" =~ ^[Yy]$ ]]; then
     elif [[ "$OSTYPE" == "darwin"* ]]; then
         open "$URL"
     else
-        echo "⚠️️ Could not detect browser. Please navigate to $URL manually."
+        echo "⚠ Could not detect browser. Please navigate to $URL manually."
     fi
 else
     echo "🛑 Setup complete. You can run the container later."
